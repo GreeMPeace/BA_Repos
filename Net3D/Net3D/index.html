@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+</head>
+<body>
+    <div>
+        Hello, welcome to this cool App.
+    </div>
+    <div>
+        <input type="file" id="file_input1" onchange="saveStatus(this)" multiple />
+    </div>
+    <div>
+        <input type="file" id="file_input2" onchange="loadAntenna(this)" />
+    </div>
+    <div>
+        <input type="file" id="file_input3" onchange="loadMeasurement(this)" />
+    </div>
+    <div id="ThreeJS"></div>
+    <script src="scripts/three.js"></script>
+    <script src="scripts/dbf.js"></script>
+    <script src="scripts/shp.js"></script>
+    <script src="scripts/shp_three.js"></script>
+    <script src="scripts/graphics.js"></script>
+    <script src="scripts/MarchingCubes.js"></script>
+    <script src="scripts/dat.gui.min.js"></script>
+    <script src="scripts/GUI.js"></script>
+    <script src="scripts/OrbitControls.js"></script>
+    <script src="scripts/apa.js"></script>
+    <script src="scripts/meas.js"></script>
+    <script src="scripts/oda.js"></script>
+    <script src="scripts/volume.js"></script>
+    <script src="scripts/TrackballControls.js"></script>
+    <script src="scripts/main.js"></script>
+
+</body>
+</html>
