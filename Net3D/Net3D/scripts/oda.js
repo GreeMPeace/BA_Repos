@@ -12,34 +12,42 @@ ODAParser.load = function (src, callback, onerror) {
 };
 
 ODAParser.prototype.parse = function (Buffer, src) {
-    var lines = Buffer.split(/\n/);
-    var vals = [];
-    var buildings = [];
-    var start = false
-    var num
+    //var lines = Buffer.split(/\n/);
+    //var vals = [];
+    //var buildings = [];
+    //var start = false
+    //var num
 
-    for (var i = 0; i < lines.length; i++) {
-        vals = [];
-        if (!lines[i].match(/BEGIN_BUILDINGS/) && !start)
-            continue;
-        if (lines[i].match(/BEGIN_BUILDINGS/)) {
-            start = true;
-            continue;
-        }
-        if (lines[i].match(/END_BUILDINGS/))
-            break;
-        vals = lines[i].split(/\s+/);
-        num = vals[2];
-        buildings[buildings.length] = {};
-        buildings[buildings.length - 1].x = [];
-        buildings[buildings.length - 1].y = [];
-        for (var j = 0; j < num; j++) {
-            buildings[buildings.length - 1].x[j] = Number(vals[2 * j + 3].substring(0, vals[2 * j + 3].length - 1));
-            buildings[buildings.length - 1].y[j] = Number(vals[2 * j + 4]);
-        }
-        buildings[buildings.length - 1].height = Number(vals[2 * num + 3]);
-    }
-    return buildings;
+    //for (var i = 0; i < lines.length; i++) {
+    //    vals = [];
+    //    if (!lines[i].match(/BEGIN_BUILDINGS/) && !start)
+    //        continue;
+    //    if (lines[i].match(/BEGIN_BUILDINGS/)) {
+    //        start = true;
+    //        continue;
+    //    }
+    //    if (lines[i].match(/END_BUILDINGS/))
+    //        break;
+    //    vals = lines[i].split(/\s+/);
+    //    num = vals[2];
+    //    buildings[buildings.length] = {};
+    //    buildings[buildings.length - 1].x = [];
+    //    buildings[buildings.length - 1].y = [];
+    //    for (var j = 0; j < num; j++) {
+    //        buildings[buildings.length - 1].x[j] = Number(vals[2 * j + 3].substring(0, vals[2 * j + 3].length - 1));
+    //        buildings[buildings.length - 1].y[j] = Number(vals[2 * j + 4]);
+    //    }
+    //    buildings[buildings.length - 1].height = Number(vals[2 * num + 3]);
+    //}
+    //return buildings;
+
+    var uri = 'api/loading/Frankfurt.oda';
+    $.getJSON(uri, function () { })
+    .done(function (data) {
+        $.each(data.items, function (i, item) {
+            console.log(item.height);
+        });
+    });
 };
 
 ODAParser.prototype.createModel = function (obj) {
