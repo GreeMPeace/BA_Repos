@@ -120,10 +120,10 @@ function measLoad(mea) {
 }
 
 function odaLoad(od) {
-    oda = od;
-    if (oda) {
-        buildLoad = true;
-    }
+    //oda = od;
+    //if (oda) {
+    //    buildLoad = true;
+    //}
 }
 
 function shpLoadError() {

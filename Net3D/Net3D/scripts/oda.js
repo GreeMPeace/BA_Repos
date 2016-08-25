@@ -41,12 +41,27 @@ ODAParser.prototype.parse = function (Buffer, src) {
     //}
     //return buildings;
 
-    var uri = 'api/loading/Frankfurt.oda';
-    $.getJSON(uri, function () { })
+    var uri = 'api/Building';
+    var result;
+    $.ajax({
+        url: uri,
+        type: "GET",
+        data: "Frankfurt.oda",
+        datatype: "json",
+        beforeSend: function () { },
+        complete: function () { }
+    })
     .done(function (data) {
-        $.each(data.items, function (i, item) {
-            console.log(item.height);
-        });
+        oda = data;
+        if (oda) {
+            buildLoad = true;
+        }
+        //$.each(data, function (i, item) {
+        //    alert("" + item.height);
+        //});
+    })
+    .fail(function (a, b, c) {
+        alert("Error")
     });
 };
 

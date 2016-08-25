@@ -1,3 +1,4 @@
+C:\Users\inets\Documents\Git\BA_Repos\Net3D\Net3D\obj\Debug\Net3D.csprojResolveAssemblyReference.cache
 C:\Users\inets\Documents\Git\BA_Repos\Net3D\Net3D\bin\ApplicationInsights.config
 C:\Users\inets\Documents\Git\BA_Repos\Net3D\Net3D\bin\roslyn\csc.exe
 C:\Users\inets\Documents\Git\BA_Repos\Net3D\Net3D\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
@@ -36,6 +37,5 @@ C:\Users\inets\Documents\Git\BA_Repos\Net3D\Net3D\bin\Newtonsoft.Json.xml
 C:\Users\inets\Documents\Git\BA_Repos\Net3D\Net3D\bin\System.Net.Http.Formatting.xml
 C:\Users\inets\Documents\Git\BA_Repos\Net3D\Net3D\bin\System.Web.Http.xml
 C:\Users\inets\Documents\Git\BA_Repos\Net3D\Net3D\bin\System.Web.Http.WebHost.xml
-C:\Users\inets\Documents\Git\BA_Repos\Net3D\Net3D\obj\Debug\Net3D.csprojResolveAssemblyReference.cache
 C:\Users\inets\Documents\Git\BA_Repos\Net3D\Net3D\obj\Debug\Net3D.dll
 C:\Users\inets\Documents\Git\BA_Repos\Net3D\Net3D\obj\Debug\Net3D.pdb
