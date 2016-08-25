@@ -151,10 +151,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AntennaController.cs" />
     <Compile Include="Controllers\BuildingController.cs" />
+    <Compile Include="Controllers\MeasurementController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Antenna.cs" />
     <Compile Include="Models\Building.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
