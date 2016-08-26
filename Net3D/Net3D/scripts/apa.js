@@ -1,13 +1,35 @@
 ﻿APAParser = function () { };
 
 APAParser.load = function (src, callback, onerror) {
-    var reader = new FileReader();
-    reader.onload = function (obj) {
-        var d = new APAParser().parse(obj.target.result, src);
-        callback(d);
-    }
-    reader.onerror = onerror;
-    reader.readAsText(src);
+    //var reader = new FileReader();
+    //reader.onload = function (obj) {
+    //    var d = new APAParser().parse(obj.target.result, src);
+    //    callback(d);
+    //}
+    //reader.onerror = onerror;
+    //reader.readAsText(src);
+    var uri = 'api/Antenna';
+    var result;
+    $.ajax({
+        url: uri,
+        type: "GET",
+        data: "Allgon_7333_00_1900.apa",
+        datatype: "json",
+        beforeSend: function () { },
+        complete: function () { }
+    })
+    .done(function (data) {
+        apa = data;
+        if (apa) {
+            antennaLoad = true;
+        }
+        //$.each(data, function (i, item) {
+        //    alert("" + item.height);
+        //});
+    })
+    .fail(function (a, b, c) {
+        alert("Error")
+    });
 };
 
 APAParser.prototype.parse = function (Buffer, src) {

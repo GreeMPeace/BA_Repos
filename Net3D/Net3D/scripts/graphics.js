@@ -41,35 +41,35 @@ p.createAntenna = function (obj) {
     var vertex = new THREE.Vector3();
     var vertex1 = new THREE.Vector3();
     var face = new THREE.Face3();
-    var min = obj[0].dirStr;
-    var max = obj[0].dirStr;
+    var min = obj.dirStr[0];
+    var max = obj.dirStr[0];
 
     for (var m = 0; m < 181 * 360; m++) {
-        if (min > obj[m].dirStr) {
-            min = obj[m].dirStr;
+        if (min > obj.dirStr[m]) {
+            min = obj.dirStr[m];
         }
-        if (max < obj[m].dirStr) {
-            max = obj[m].dirStr;
+        if (max < obj.dirStr[m]) {
+            max = obj.dirStr[m];
         }
     }
     for (var i = 0; i <= 180; i += 6) {
         if (i != 0 && i != 180) {
             for (var j = 0; j < 360; j += 6) {
-                vertex.x = Math.cos(obj[i * 360 + j].horAng * 2 * Math.PI / 360) * Math.sin(obj[i * 360 + j].verAng * 2 * Math.PI / 360);
-                vertex.z = Math.cos(obj[i * 360 + j].verAng * 2 * Math.PI / 360);
-                vertex.y = Math.sin(obj[i * 360 + j].horAng * 2 * Math.PI / 360) * Math.sin(obj[i * 360 + j].verAng * 2 * Math.PI / 360);
-                vertex.multiplyScalar((obj[i * 360 + j].dirStr - min) / (max - min));
+                vertex.x = Math.cos(obj.horAng[i * 360 + j] * 2 * Math.PI / 360) * Math.sin(obj.verAng[i * 360 + j] * 2 * Math.PI / 360);
+                vertex.z = Math.cos(obj.verAng[i * 360 + j] * 2 * Math.PI / 360);
+                vertex.y = Math.sin(obj.horAng[i * 360 + j] * 2 * Math.PI / 360) * Math.sin(obj.verAng[i * 360 + j] * 2 * Math.PI / 360);
+                vertex.multiplyScalar((obj.dirStr[i * 360 + j] - min) / (max - min));
                 geom.vertices.push(new THREE.Vector3(vertex.x, vertex.y, vertex.z));
             }
         }
         if (i == 0) {
             vertex1 = new THREE.Vector3(0, 0, 1);
-            vertex1.multiplyScalar((obj[0].dirStr - min) / (max - min));
+            vertex1.multiplyScalar((obj.dirStr[0] - min) / (max - min));
             continue;
         }
         if (i == 180) {
             vertex = new THREE.Vector3(0, 0, -1);
-            vertex.multiplyScalar((obj[180 * 360].dirStr - min) / (max - min));
+            vertex.multiplyScalar((obj.dirStr[180 * 360] - min) / (max - min));
             geom.vertices.push(new THREE.Vector3(vertex1.x, vertex1.y, vertex1.z));
             geom.vertices.push(new THREE.Vector3(vertex.x, vertex.y, vertex.z));
             continue;

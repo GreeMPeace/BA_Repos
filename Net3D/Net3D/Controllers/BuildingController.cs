@@ -40,6 +40,7 @@ namespace Net3D.Controllers
                 if (start)
                 {
                     var building = new Building();
+                    building.id = Convert.ToInt32(words[0]);
                     int corners = Convert.ToInt32(words[1]);
                     building.x = new double[corners];
                     building.y = new double[corners];
