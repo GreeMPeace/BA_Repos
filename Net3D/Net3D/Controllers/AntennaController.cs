@@ -18,7 +18,6 @@ namespace Net3D.Controllers
 
             var lines = contents.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
             double gain = 0;
-            bool start = false;
             for (int i = 0; i < lines.Length; i++)
             {
                 var words = lines[i].Split(new char[] { ' ', '\r' }, StringSplitOptions.RemoveEmptyEntries);

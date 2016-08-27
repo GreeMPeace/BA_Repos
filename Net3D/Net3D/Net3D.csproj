@@ -159,7 +159,9 @@
     </Compile>
     <Compile Include="Models\Antenna.cs" />
     <Compile Include="Models\Building.cs" />
+    <Compile Include="Models\Measurement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\fourdimlist.cs" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
