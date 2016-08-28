@@ -11,16 +11,29 @@ namespace Net3D.Controllers
 {
     public class MeasurementController : ApiController
     {
-        public IHttpActionResult Get(string dim)
+        [HttpGet]
+        public IHttpActionResult Get(string id)
         {
-            Measurement meas = new Measurement();
-            var contents = System.IO.File.ReadAllText(HttpContext.Current.Server.MapPath(@"~/App_Data/Allgon_7333_00_1900.apa"));
+            var dimstr = id.Split(new char[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
+            if (dimstr.Length != 3)
+            {
+                return Content(HttpStatusCode.BadRequest, "Error with the dimensions!");
+            }
+
+            double[] dims = new double[3];
+            dims[0] = double.Parse(dimstr[0], System.Globalization.CultureInfo.InvariantCulture);
+            dims[1] = double.Parse(dimstr[1], System.Globalization.CultureInfo.InvariantCulture);
+            dims[2] = double.Parse(dimstr[2], System.Globalization.CultureInfo.InvariantCulture);
+
+            Measurement meas = new Measurement(dims);
+
+            var contents = System.IO.File.ReadAllText(HttpContext.Current.Server.MapPath(@"~/App_Data/Power_Fra_2_BS_1.txt"));
 
             var lines = contents.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
             for (int i = 1; i < lines.Length; i++)
             {
-                var words = lines[i].Split(new char[] { ' ', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                var words = lines[i].Split(new char[] { ' ', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries);
 
                 if (words.Length == 0)
                     continue;
@@ -34,6 +47,9 @@ namespace Net3D.Controllers
                     meas.vals[meas.vals.Count - 1].Add(double.Parse(words[j], System.Globalization.CultureInfo.InvariantCulture));
                 }
             }
+
+            meas.fill();
+            meas.expand();
 
             return Ok(meas);
         }

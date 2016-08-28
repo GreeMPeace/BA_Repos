@@ -11,11 +11,28 @@ namespace Net3D.Models
         public List<double> y { get; set; }
         public List<double> z { get; set; }
         public List<List<double>> vals { get; set; }
+        public double[] dim { get; set; }
+        private double[,] xlookup { get; set; }
+        private double[,] ylookup { get; set; }
+        private double[,] zlookup { get; set; }
+
+        public Measurement(double[] dims)
+        {
+            x = new List<double>();
+            y = new List<double>();
+            z = new List<double>();
+            vals = new List<List<double>>();
+            dim = dims;
+            xlookup = new double[,] { { 0, 1, 1 }, { dims[1], 0, dims[2] }, { dims[1] * dims[2], dims[1] * dims[2], 0 } };
+            ylookup = new double[,] { { 0, 1, 1 }, { dims[2], 0, dims[0] }, { dims[0] * dims[2], dims[0] * dims[2], 0 } };
+            zlookup = new double[,] { { 0, 1, 1 }, { dims[0], 0, dims[1] }, { dims[1] * dims[0], dims[1] * dims[0], 0 } };
+        }
 
         public void fill()
         {
 
-            double xdiff, ydiff, zdiff, xrang, yrang, zrang;
+            double xdiff = 0, ydiff = 0, zdiff = 0;
+            int xrang = 0, yrang = 0, zrang = 0;
             double lastx = x[0];
             double lasty = y[0];
             double lastz = z[0];
@@ -26,27 +43,27 @@ namespace Net3D.Models
                 if (lastx != x[l] && boolx)
                 {
                     xrang = m++;
-                    xdiff = Math.abs(lastx - values[l].x);
+                    xdiff = Math.Abs(lastx - x[l]);
                     boolx = false;
                 }
                 if (lasty != y[l] && booly)
                 {
                     yrang = m++;
-                    ydiff = Math.abs(lasty - values[l].y);
+                    ydiff = Math.Abs(lasty - y[l]);
                     booly = false;
                 }
                 if (lastz != z[l] && boolz)
                 {
                     zrang = m++;
-                    zdiff = Math.abs(lastz - values[l].z);
+                    zdiff = Math.Abs(lastz - z[l]);
                     boolz = false;
                 }
                 if (!boolx && !booly && !boolz)
                     break;
-                if (l == values.length - 1)
+                if (l == x.Count - 1)
                 {
                     if (m < 2)
-                        throw new Error("no valid values");
+                        throw new System.Exception("no valid values");
                     if (boolx)
                         xrang = 2;
                     if (booly)
@@ -58,17 +75,17 @@ namespace Net3D.Models
 
             for (int l = 0; l < x.Count; l++)
             {
-                if (Math.abs(lastx - values[l].x) > xdiff && l % (xlookup[xrang, yrang] * dim.x) != 0)
+                if (Math.Abs(lastx - x[l]) > xdiff && l % (xlookup[xrang, yrang] * dim[0]) != 0)
                 {
                     introduce(l, lastx, xdiff, 'x');
                     l--;
                 }
-                if (Math.abs(lasty - values[l].y) > ydiff && l % (ylookup[yrang, zrang] * dim.y) != 0)
+                if (Math.Abs(lasty - y[l]) > ydiff && l % (ylookup[yrang, zrang] * dim[1]) != 0)
                 {
                     introduce(l, lasty, ydiff, 'y');
                     l--;
                 }
-                if (Math.abs(lastz - values[l].z) > zdiff && l % (zlookup[zrang, xrang] * dim.z) != 0)
+                if (Math.Abs(lastz - z[l]) > zdiff && l % (zlookup[zrang, xrang] * dim[2]) != 0)
                 {
                     introduce(l, lastz, zdiff, 'z');
                     l--;
@@ -90,7 +107,7 @@ namespace Net3D.Models
                 y.Insert(i, y[i - 1]);
                 z.Insert(i, z[i - 1]);
                 vals.Insert(i, new List<double>());
-                for (var j = 0; j < vals[i].length; j++)
+                for (var j = 0; j < vals[i].Count; j++)
                 {
                     vals[i].Add(-1000);
                 }
@@ -101,7 +118,7 @@ namespace Net3D.Models
                 x.Insert(i, x[i - 1]);
                 z.Insert(i, z[i - 1]);
                 vals.Insert(i, new List<double>());
-                for (var j = 0; j < vals[i].length; j++)
+                for (var j = 0; j < vals[i].Count; j++)
                 {
                     vals[i].Add(-1000);
                 }
@@ -112,11 +129,43 @@ namespace Net3D.Models
                 y.Insert(i, y[i - 1]);
                 x.Insert(i, x[i - 1]);
                 vals.Insert(i, new List<double>());
-                for (var j = 0; j < vals[i-1].length; j++)
+                for (var j = 0; j < vals[i-1].Count; j++)
                 {
                     vals[i].Add(-1000);
                 }
             }
+        }
+
+        public void expand()
+        {
+            var xalt = x;
+            var yalt = y;
+            var zalt = z;
+            var valsalt = vals;
+            x.AddRange(xalt);
+            y.AddRange(yalt);
+            zalt.ForEach(delegate(double v)
+            {
+                v += 1.5;
+            });
+            z.AddRange(zalt);
+            vals.AddRange(valsalt);
+            x.AddRange(xalt);
+            y.AddRange(yalt);
+            zalt.ForEach(delegate(double v)
+            {
+                v += 1.5;
+            });
+            z.AddRange(zalt);
+            vals.AddRange(valsalt);
+            x.AddRange(xalt);
+            y.AddRange(yalt);
+            zalt.ForEach(delegate(double v)
+            {
+                v += 1.5;
+            });
+            z.AddRange(zalt);
+            vals.AddRange(valsalt);
         }
     }
 }

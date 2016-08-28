@@ -1,13 +1,35 @@
 ﻿MEASParser = function () { };
 
 MEASParser.load = function (src, callback, onerror) {
-    var reader = new FileReader();
-    reader.onload = function (obj) {
-        var d = new MEASParser().parse(obj.target.result, src);
-        callback(d);
-    }
-    reader.onerror = onerror;
-    reader.readAsText(src);
+    //var reader = new FileReader();
+    //reader.onload = function (obj) {
+    //    var d = new MEASParser().parse(obj.target.result, src);
+    //    callback(d);
+    //}
+    //reader.onerror = onerror;
+    //reader.readAsText(src);
+
+    var uri = 'api/Measurement/703-532-1';
+    var result;
+    $.ajax({
+        url: uri,
+        type: "GET",
+        datatype: "json",
+        beforeSend: function () { },
+        complete: function () { }
+    })
+    .done(function (data) {
+        oda = data;
+        if (oda) {
+            buildLoad = true;
+        }
+        //$.each(data, function (i, item) {
+        //    alert("" + item.height);
+        //});
+    })
+    .fail(function (a, b, c) {
+        alert("Error")
+    });
 };
 
 MEASParser.prototype.parse = function (Buffer, src) {
