@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 namespace Net3D.Models
 {
+    [Serializable]
     public class Measurement
     {
         public List<double> x { get; set; }
@@ -138,10 +141,10 @@ namespace Net3D.Models
 
         public void expand()
         {
-            var xalt = x;
-            var yalt = y;
-            var zalt = z;
-            var valsalt = vals;
+            var xalt = DeepClone<List<double>>(x);
+            var yalt = DeepClone<List<double>>(y);
+            var zalt = DeepClone<List<double>>(z);
+            var valsalt = DeepClone<List<List<double>>>(vals);
             x.AddRange(xalt);
             y.AddRange(yalt);
             zalt.ForEach(delegate(double v)
@@ -166,6 +169,18 @@ namespace Net3D.Models
             });
             z.AddRange(zalt);
             vals.AddRange(valsalt);
+        }
+
+        public static T DeepClone<T>(T obj)
+        {
+            using (var ms = new MemoryStream())
+            {
+                var formatter = new BinaryFormatter();
+                formatter.Serialize(ms, obj);
+                ms.Position = 0;
+
+                return (T)formatter.Deserialize(ms);
+            }
         }
     }
 }
