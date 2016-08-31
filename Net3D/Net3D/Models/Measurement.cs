@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using Net3D.Utils;
 
 namespace Net3D.Models
 {
@@ -14,16 +15,22 @@ namespace Net3D.Models
         public List<double> y { get; set; }
         public List<double> z { get; set; }
         public List<List<double>> vals { get; set; }
-        public double[] dim { get; set; }
+        public int[] dim { get; set; }
         private double[,] xlookup { get; set; }
         private double[,] ylookup { get; set; }
         private double[,] zlookup { get; set; }
+        private int xrang { get; set; }
+        private int yrang { get; set; }
+        private int zrang { get; set; }
 
-        public Measurement(double[] dims)
+        public Measurement(int[] dims)
         {
             x = new List<double>();
             y = new List<double>();
             z = new List<double>();
+            xrang = 0;
+            yrang = 0;
+            zrang = 0;
             vals = new List<List<double>>();
             dim = dims;
             xlookup = new double[,] { { 0, 1, 1 }, { dims[1], 0, dims[2] }, { dims[1] * dims[2], dims[1] * dims[2], 0 } };
@@ -35,7 +42,6 @@ namespace Net3D.Models
         {
 
             double xdiff = 0, ydiff = 0, zdiff = 0;
-            int xrang = 0, yrang = 0, zrang = 0;
             double lastx = x[0];
             double lasty = y[0];
             double lastz = z[0];
@@ -137,6 +143,29 @@ namespace Net3D.Models
                     vals[i].Add(-1000);
                 }
             }
+        }
+
+        public fourdimlist<double> extract()
+        {
+            fourdimlist<double> output = new fourdimlist<double>();
+            int stepx = Math.Pow(dim[0], xrang);
+            int stepy = Math.Pow(dim[1], yrang);
+            int stepz = Math.Pow(dim[2], zrang);
+
+            for (int m = 0; m < output.Count; m++)
+            {
+                for (int i = 0; i < output[m].Count; i++)
+                {
+                    for (int j = 0; j < output[m][i].Count; j++)
+                    {
+                        for (int k = 0; k < output[m][i][j].Count; k++)
+                        {
+                            output.AddPos(vals[stepx * i + stepy * j + stepz * k][m], m, i, j, k);
+                        }
+                    }
+                }
+            }
+            return output;
         }
 
         public void expand()

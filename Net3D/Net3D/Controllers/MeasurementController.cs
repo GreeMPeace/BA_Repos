@@ -6,6 +6,7 @@ using System.Web;
 using System.Net.Http;
 using System.Web.Http;
 using Net3D.Models;
+using Net3D.Utils;
 
 namespace Net3D.Controllers
 {
@@ -20,10 +21,10 @@ namespace Net3D.Controllers
                 return Content(HttpStatusCode.BadRequest, "Error with the dimensions!");
             }
 
-            double[] dims = new double[3];
-            dims[0] = double.Parse(dimstr[0], System.Globalization.CultureInfo.InvariantCulture);
-            dims[1] = double.Parse(dimstr[1], System.Globalization.CultureInfo.InvariantCulture);
-            dims[2] = double.Parse(dimstr[2], System.Globalization.CultureInfo.InvariantCulture);
+            int[] dims = new int[3];
+            dims[0] = int.Parse(dimstr[0], System.Globalization.CultureInfo.InvariantCulture);
+            dims[1] = int.Parse(dimstr[1], System.Globalization.CultureInfo.InvariantCulture);
+            dims[2] = int.Parse(dimstr[2], System.Globalization.CultureInfo.InvariantCulture);
 
             Measurement meas = new Measurement(dims);
 
@@ -49,9 +50,10 @@ namespace Net3D.Controllers
             }
 
             meas.fill();
+            fourdimlist<double> values = meas.extract();
             meas.expand();
 
-            return Ok(meas);
+            return Ok(values);
         }
     }
 }
