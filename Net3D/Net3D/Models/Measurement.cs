@@ -116,7 +116,7 @@ namespace Net3D.Models
                 y.Insert(i, y[i - 1]);
                 z.Insert(i, z[i - 1]);
                 vals.Insert(i, new List<double>());
-                for (var j = 0; j < vals[i].Count; j++)
+                for (var j = 0; j < vals[i-1].Count; j++)
                 {
                     vals[i].Add(-1000);
                 }
@@ -127,7 +127,7 @@ namespace Net3D.Models
                 x.Insert(i, x[i - 1]);
                 z.Insert(i, z[i - 1]);
                 vals.Insert(i, new List<double>());
-                for (var j = 0; j < vals[i].Count; j++)
+                for (var j = 0; j < vals[i-1].Count; j++)
                 {
                     vals[i].Add(-1000);
                 }
@@ -148,17 +148,17 @@ namespace Net3D.Models
         public fourdimlist<double> extract()
         {
             fourdimlist<double> output = new fourdimlist<double>();
-            int stepx = Math.Pow(dim[0], xrang);
-            int stepy = Math.Pow(dim[1], yrang);
-            int stepz = Math.Pow(dim[2], zrang);
+            int stepx = Convert.ToInt32(xlookup[xrang, yrang]);
+            int stepy = Convert.ToInt32(ylookup[yrang, zrang]);
+            int stepz = Convert.ToInt32(zlookup[zrang, xrang]);
 
-            for (int m = 0; m < output.Count; m++)
+            for (int m = 0; m < vals[0].Count; m++)
             {
-                for (int i = 0; i < output[m].Count; i++)
+                for (int i = 0; i < dim[0]; i++)
                 {
-                    for (int j = 0; j < output[m][i].Count; j++)
+                    for (int j = 0; j < dim[1]; j++)
                     {
-                        for (int k = 0; k < output[m][i][j].Count; k++)
+                        for (int k = 0; k < dim[2]; k++)
                         {
                             output.AddPos(vals[stepx * i + stepy * j + stepz * k][m], m, i, j, k);
                         }

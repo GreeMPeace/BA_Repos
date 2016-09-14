@@ -15,20 +15,24 @@ namespace Net3D.Utils
                     this.Add(new List<List<List<T>>>());
                     continue;
                 }
-                if (this[a].Count <= b)
+                else if (this[a].Count <= b)
                 {
                     this[a].Add(new List<List<T>>());
                     continue;
                 }
-                if (this[a][b].Count <= c)
+                else if (this[a][b].Count <= c)
                 {
                     this[a][b].Add(new List<T>());
                     continue;
                 }
-                if (this[a][b][c].Count <= d)
+                else if (this[a][b][c].Count <= d)
                 {
                     this[a][b][c].Add(new T());
                     continue;
+                }
+                else
+                {
+                    break;
                 }
             }
             this[a][b][c][d] = obj;
