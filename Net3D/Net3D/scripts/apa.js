@@ -8,7 +8,7 @@ APAParser.load = function (src, callback, onerror) {
     //}
     //reader.onerror = onerror;
     //reader.readAsText(src);
-    var uri = 'api/Antenna';
+    var uri = 'api/Antenna/Get';
     var result;
     $.ajax({
         url: uri,

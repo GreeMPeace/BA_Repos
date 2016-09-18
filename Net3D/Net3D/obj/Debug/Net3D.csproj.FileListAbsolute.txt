@@ -77,6 +77,6 @@ C:\Users\Markus\Documents\Uni\BA_Repos\Net3D\Net3D\bin\Newtonsoft.Json.xml
 C:\Users\Markus\Documents\Uni\BA_Repos\Net3D\Net3D\bin\System.Net.Http.Formatting.xml
 C:\Users\Markus\Documents\Uni\BA_Repos\Net3D\Net3D\bin\System.Web.Http.xml
 C:\Users\Markus\Documents\Uni\BA_Repos\Net3D\Net3D\bin\System.Web.Http.WebHost.xml
-C:\Users\Markus\Documents\Uni\BA_Repos\Net3D\Net3D\obj\Debug\Net3D.csprojResolveAssemblyReference.cache
 C:\Users\Markus\Documents\Uni\BA_Repos\Net3D\Net3D\obj\Debug\Net3D.dll
 C:\Users\Markus\Documents\Uni\BA_Repos\Net3D\Net3D\obj\Debug\Net3D.pdb
+C:\Users\Markus\Documents\Uni\BA_Repos\Net3D\Net3D\obj\Debug\Net3D.csprojResolveAssemblyReference.cache

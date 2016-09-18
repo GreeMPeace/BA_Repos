@@ -9,7 +9,7 @@ MEASParser.load = function (src, callback, onerror) {
     //reader.onerror = onerror;
     //reader.readAsText(src);
 
-    var uri = 'api/Measurement/703-532-1';
+    var uri = 'api/Measurement/GetSimulation/703-532-1';
     var result;
     $.ajax({
         url: uri,

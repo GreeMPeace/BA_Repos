@@ -10,8 +10,29 @@
     isocolor: "#00f0ff",
     source: '1',
     dots: true,
-    isolevel: -79.0
+    isolevel: -79.0,
+    load: loadReal()
 };
+
+function loadReal() {
+    return function () {
+        var uri = 'api/Measurement/GetReal/2600_urban_Prx_Aachen?end=csv';
+        var result;
+        $.ajax({
+            url: uri,
+            type: "GET",
+            datatype: "json",
+            beforeSend: function () { },
+            complete: function () { }
+        })
+        .done(function (data) {
+
+        })
+        .fail(function (a, b, c) {
+            alert("Error")
+        });
+    }
+}
 
 var gui = new dat.GUI();
 
@@ -41,6 +62,8 @@ function setupGui() {
     folder.add(guiController, "isolevel", -120, -20, 1).onFinishChange(changeIso);
     folder.add(guiController, "dots").name("Dotcloud:").onChange(changeDots);
     folder.add(guiController, "source", []).name("Dataset:").onChange(changeIso);
+
+    gui.add(guiController, "load").name("Load Real Data");
     return;
 
 }

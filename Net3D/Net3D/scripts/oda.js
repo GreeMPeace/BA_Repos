@@ -41,12 +41,11 @@ ODAParser.prototype.parse = function (Buffer, src) {
     //}
     //return buildings;
 
-    var uri = 'api/Building';
+    var uri = 'api/Building/Get';
     var result;
     $.ajax({
         url: uri,
         type: "GET",
-        data: "Frankfurt.oda",
         datatype: "json",
         beforeSend: function () { },
         complete: function () { }

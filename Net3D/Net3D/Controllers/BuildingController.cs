@@ -12,7 +12,7 @@ namespace Net3D.Controllers
 {
     public class BuildingController : ApiController
     {
-        public IHttpActionResult Get()
+        public IHttpActionResult Get(string id)
         {
             List<Building> lBuildings = new List<Building>();
             var contents = System.IO.File.ReadAllText(HttpContext.Current.Server.MapPath(@"~/App_Data/Frankfurt.oda"));
