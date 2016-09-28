@@ -5,6 +5,7 @@ using System.Web;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using Net3D.Utils;
+using System.Diagnostics;
 
 namespace Net3D.Models
 {
@@ -166,33 +167,30 @@ namespace Net3D.Models
 
         public void expand()
         {
-            var xalt = DeepClone<List<double>>(x);
-            var yalt = DeepClone<List<double>>(y);
-            var zalt = DeepClone<List<double>>(z);
+            var xalt1 = DeepClone<List<double>>(x);
+            var yalt1 = DeepClone<List<double>>(y);
+            var zalt1 = DeepClone<List<double>>(z);
             var valsalt = DeepClone<List<List<double>>>(vals);
-            x.AddRange(xalt);
-            y.AddRange(yalt);
-            zalt.ForEach(delegate(double v)
-            {
-                v += 1.5;
-            });
-            z.AddRange(zalt);
+            x.AddRange(xalt1);
+            y.AddRange(yalt1);
+            zalt1.ForEach(x => Debug.Print(Convert.ToString(x)) );
+            z.AddRange(zalt1);
             vals.AddRange(valsalt);
-            x.AddRange(xalt);
-            y.AddRange(yalt);
-            zalt.ForEach(delegate(double v)
-            {
-                v += 1.5;
-            });
-            z.AddRange(zalt);
+            var xalt2 = DeepClone<List<double>>(x);
+            var yalt2 = DeepClone<List<double>>(y);
+            var zalt2 = DeepClone<List<double>>(z);
+            x.AddRange(xalt2);
+            y.AddRange(yalt2);
+            zalt2.ForEach(x => { x += 3; });
+            z.AddRange(zalt2);
             vals.AddRange(valsalt);
-            x.AddRange(xalt);
-            y.AddRange(yalt);
-            zalt.ForEach(delegate(double v)
-            {
-                v += 1.5;
-            });
-            z.AddRange(zalt);
+            var xalt3 = DeepClone<List<double>>(x);
+            var yalt3 = DeepClone<List<double>>(y);
+            var zalt3 = DeepClone<List<double>>(z);
+            x.AddRange(xalt3);
+            y.AddRange(yalt3);
+            zalt3.ForEach(x => { x += 4.5; });
+            z.AddRange(zalt3);
             vals.AddRange(valsalt);
         }
 

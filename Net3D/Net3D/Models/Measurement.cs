@@ -20,8 +20,8 @@ namespace Net3D.Models
             y = new List<double>();
             z = new List<double>();
             vals = new List<List<double>>();
-            min = new double[2] { 0, 0 };
-            max = new double[2] { 0, 0 };
+            min = new double[5] { 1000, 1000, 1000, 1000, 1000 };
+            max = new double[5] { -1000, -1000, -1000, -1000, -1000 };
         }
     }
 

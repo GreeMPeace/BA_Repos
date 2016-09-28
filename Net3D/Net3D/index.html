@@ -1,24 +1,11 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title></title>
+    <title>Network Visualizer</title>
 	<meta charset="utf-8" />
-</head>
-<body>
-    <div>
-        Hello, welcome to this cool App.
-    </div>
-    <div>
-        <input type="file" id="file_input1" onchange="saveStatus(this)" multiple />
-    </div>
-    <div>
-        <input type="file" id="file_input2" onchange="loadAntenna(this)" />
-    </div>
-    <div>
-        <input type="file" id="file_input3" onchange="loadMeasurement(this)" />
-    </div>
-    <div id="ThreeJS"></div>
+    <meta content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"></head>
+<body style="margin: 0px; overflow: hidden;">
+    <div style="position: absolute; left:0px; top:0px";" id="ThreeJS"></div>
     <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
     <script src="scripts/three.js"></script>
     <script src="scripts/dbf.js"></script>
@@ -34,7 +21,7 @@
     <script src="scripts/oda.js"></script>
     <script src="scripts/volume.js"></script>
     <script src="scripts/TrackballControls.js"></script>
+    <script src="scripts/RealData.js"></script>
     <script src="scripts/main.js"></script>
-
 </body>
 </html>

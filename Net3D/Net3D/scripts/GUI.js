@@ -11,13 +11,21 @@
     source: '1',
     dots: true,
     isolevel: -79.0,
-    load: loadReal()
+    loadReal: loadReal(),
+    loadFrank: loadFrankfurt()
 };
+
+function loadFrankfurt() {
+    return function () {
+        var loader = new ODAParser();
+        loader.parse();
+        MEASParser.load();
+    }
+}
 
 function loadReal() {
     return function () {
         var uri = 'api/Measurement/GetReal/2600_urban_Prx_Aachen?end=csv';
-        var result;
         $.ajax({
             url: uri,
             type: "GET",
@@ -26,7 +34,8 @@ function loadReal() {
             complete: function () { }
         })
         .done(function (data) {
-
+            var ren = new RealData(data);
+            ren.render();
         })
         .fail(function (a, b, c) {
             alert("Error")
@@ -63,7 +72,8 @@ function setupGui() {
     folder.add(guiController, "dots").name("Dotcloud:").onChange(changeDots);
     folder.add(guiController, "source", []).name("Dataset:").onChange(changeIso);
 
-    gui.add(guiController, "load").name("Load Real Data");
+    gui.add(guiController, "loadReal").name("Load Real Data");
+    gui.add(guiController, "loadFrank").name("Load Frankfurt");
     return;
 
 }

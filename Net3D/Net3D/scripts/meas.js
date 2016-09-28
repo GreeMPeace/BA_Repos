@@ -19,9 +19,9 @@ MEASParser.load = function (src, callback, onerror) {
         complete: function () { }
     })
     .done(function (data) {
-        oda = data;
-        if (oda) {
-            buildLoad = true;
+        meas = data;
+        if (meas) {
+            isoLoad = false;
         }
         //$.each(data, function (i, item) {
         //    alert("" + item.height);

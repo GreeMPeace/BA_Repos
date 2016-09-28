@@ -12,6 +12,7 @@ namespace Net3D.Controllers
 {
     public class BuildingController : ApiController
     {
+        [HttpGet]
         public IHttpActionResult Get(string id)
         {
             List<Building> lBuildings = new List<Building>();

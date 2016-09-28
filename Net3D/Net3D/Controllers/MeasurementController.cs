@@ -96,10 +96,37 @@ namespace Net3D.Controllers
                 for (int j = 3; j < words.Length; j++)
                 {
                     meas.vals.Last().Add(double.Parse(words[j], System.Globalization.CultureInfo.InvariantCulture));
+
+                    if (meas.min[4] > meas.vals.Last().Last())
+                        meas.min[4] = meas.vals.Last().Last();
+                    else if (meas.max[4] < meas.vals.Last().Last())
+                        meas.max[4] = meas.vals.Last().Last();
                 }
             }
 
+            fetchMap(meas.min, meas.max, id);
             return Ok(meas);
+        }
+
+        private void fetchMap(double[] min, double[] max, string name)
+        {
+            double xMiddle = (max[0] + min[0]) / 2;
+            double yMiddle = (max[1] + min[1]) / 2;
+
+            int zoom = GoogleMapsAPI.GetZoom(new Coordinate(xMiddle, yMiddle), 640, 640, min, max);
+
+
+
+            string url = "https://maps.googleapis.com/maps/api/staticmap?center=" + yMiddle + "," + xMiddle + "&zoom=" + zoom + "&size=640x640&scale=2";
+
+            WebClient client = new WebClient();
+            client.DownloadFile(url, HttpContext.Current.Server.MapPath(@"~/Maps/" + name + ".png"));
+
+            MapCoordinates bounds = GoogleMapsAPI.GetBounds(new Coordinate(xMiddle, yMiddle), zoom, 640, 640);
+            min[2] = bounds.SouthWest.X;
+            min[3] = bounds.SouthWest.Y;
+            max[2] = bounds.NorthEast.X;
+            max[3] = bounds.NorthEast.Y;
         }
     }
 }

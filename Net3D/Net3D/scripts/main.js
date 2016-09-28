@@ -4,7 +4,7 @@ var apa;
 var meas;
 var mouse = { x: 0.0, y: 0.0 };
 var fileInput;
-var camera, hudcamera, controls, scene, hudscene, renderer, container;
+var camera, hudcamera, controls, scene, hudscene, renderer, container, width, height;
 var oda;
 var buildLoad = false, isoLoad = false, antennaLoad = false;
 var canvas, ctx, texture, sprite, oldintersect;
@@ -147,12 +147,12 @@ function odaLoadError() {
 }
 
 function initialize() {
-    var width = window.innerWidth;
-    var height = (window.innerWidth / 16) * 9;
+    width = window.innerWidth;
+    height = window.innerHeight;
     scene = new THREE.Scene();
     hudscene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(75, 16 / 9, 2, 5000);
-    hudcamera = new THREE.OrthographicCamera(width / -2, width / 2, height / 2, height / -2, 0.1, 100);
+    camera = new THREE.PerspectiveCamera(75, width / height, 2, 5000);
+    hudcamera = new THREE.OrthographicCamera(width / -2, width / 2, height / 2, height / -2, 1, 10);
     hudcamera.position.z = 10;
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(width, height);
@@ -171,33 +171,39 @@ function initialize() {
     var axisHelper = new THREE.AxisHelper(2000);
     scene.add(axisHelper);
 
-    geometry = new THREE.PlaneGeometry(max.x, max.y);
-    material = new THREE.MeshLambertMaterial({ color: 0xeeeeee });
-    var plane = new THREE.Mesh(geometry, material);
-    plane.position.x = max.x / 2;
-    plane.position.y = max.y / 2;
-    plane.receiveShadow = true;
+    //geometry = new THREE.PlaneGeometry(max.x, max.y);
+    //material = new THREE.MeshLambertMaterial({ color: 0xeeeeee });
+    //var plane = new THREE.Mesh(geometry, material);
+    //plane.position.x = max.x / 2;
+    //plane.position.y = max.y / 2;
+    //plane.receiveShadow = true;
 
-    scene.add(plane);
+    //scene.add(plane);
 
     window.addEventListener('resize', onWindowResize, false);
     //document.addEventListener('mousemove', onMouseMoveDoc, false);
 
-    //canvas = document.createElement('canvas');
-    //canvas.style.border = "1px solid #d3d3d3";
-    //ctx = canvas.getContext('2d');
-    //ctx.font = "Bold 25px Arial";
-    //ctx.fillStyle = "#000000";
-    //ctx.fillText('Testing', 10, 25);
+    canvas = document.createElement('canvas');
+    canvas.style.border = "1px solid #d3d3d3";
+    ctx = canvas.getContext('2d');
+    ctx.font = "Bold 2000px Arial";
+    ctx.fillStyle = "#000000";
+    var metrics = ctx.measureText('Testing!');
+    canvas.width = metrics.width;
+    canvas.height = 2000;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText('Testing!', metrics.width/2, 1000);
 
-    //texture = new THREE.Texture(canvas);
-    //texture.needsUpdate = true;
+    texture = new THREE.Texture(canvas);
+    texture.needsUpdate = true;
 
-    //var SprMat = new THREE.SpriteMaterial({ map: texture}) //Alter to HUD!
-    //sprite = new THREE.Sprite(SprMat);
-    //sprite.scale.set(4, 2, 1);
-    //sprite.position.set(0, 0, 1);
-    //hudscene.add(sprite);
+    var SprMat = new THREE.SpriteMaterial({ map: texture}); //Alter to HUD!
+    sprite = new THREE.Sprite(SprMat);
+    sprite.scale.set(1, 1, 1);
+    sprite.position.set(50, 0, 0);
+    
+    hudscene.add(sprite);
 
     setupGui();
 
@@ -225,7 +231,20 @@ function onMouseMoveDoc(e) {
     //sprite.position.set(mouse.x, mouse.y + 25, 1);
 }
 function onWindowResize() {
-    renderer.setSize(window.innerWidth, (window.innerWidth / 16) * 9);
+    width = window.innerWidth;
+    height = window.innerHeight;
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+
+    hudcamera.left = -width / 2;
+    hudcamera.right = width / 2;
+    hudcamera.top = height / 2;
+    hudcamera.bottom = -height / 2;
+    hudcamera.updateProjectionMatrix();
+
+    RealData.updateSprites();
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
 function addBuild() {
@@ -407,8 +426,8 @@ function render() {
     //camera.lookAt(new THREE.Vector3(isosurf.geometry.vertices[0].x, 0, isosurf.geometry.vertices[0].z));
     renderer.clear();
     renderer.render(scene, camera);
-    //renderer.clearDepth();
-    //renderer.render(hudscene, hudcamera);
+    renderer.clearDepth();
+    renderer.render(hudscene, hudcamera);
 }
 //render();
 

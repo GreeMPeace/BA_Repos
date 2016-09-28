@@ -41,7 +41,7 @@ ODAParser.prototype.parse = function (Buffer, src) {
     //}
     //return buildings;
 
-    var uri = 'api/Building/Get';
+    var uri = 'api/Building/Get/Frakfurt';
     var result;
     $.ajax({
         url: uri,
