@@ -21,7 +21,7 @@ MEASParser.load = function (src, callback, onerror) {
     .done(function (data) {
         meas = data;
         if (meas) {
-            isoLoad = false;
+            isoLoad = true;
         }
         //$.each(data, function (i, item) {
         //    alert("" + item.height);

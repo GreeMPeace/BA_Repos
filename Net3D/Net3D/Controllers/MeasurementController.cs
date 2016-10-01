@@ -50,8 +50,8 @@ namespace Net3D.Controllers
             }
 
             meas.fill();
-            fourdimlist<double> values = meas.extract();
             meas.expand();
+            fourdimlist<double> values = meas.extract();
 
             return Ok(values);
         }

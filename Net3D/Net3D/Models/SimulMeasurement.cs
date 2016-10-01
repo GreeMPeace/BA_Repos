@@ -173,25 +173,35 @@ namespace Net3D.Models
             var valsalt = DeepClone<List<List<double>>>(vals);
             x.AddRange(xalt1);
             y.AddRange(yalt1);
-            zalt1.ForEach(x => Debug.Print(Convert.ToString(x)) );
+            for (int i = 0; i < zalt1.Count; i++)
+            {
+                zalt1[i] += 1.5;
+            }
             z.AddRange(zalt1);
             vals.AddRange(valsalt);
-            var xalt2 = DeepClone<List<double>>(x);
-            var yalt2 = DeepClone<List<double>>(y);
-            var zalt2 = DeepClone<List<double>>(z);
+            var xalt2 = DeepClone<List<double>>(xalt1);
+            var yalt2 = DeepClone<List<double>>(yalt1);
+            var zalt2 = DeepClone<List<double>>(zalt1);
             x.AddRange(xalt2);
             y.AddRange(yalt2);
-            zalt2.ForEach(x => { x += 3; });
+            for (int i = 0; i < zalt2.Count; i++)
+            {
+                zalt2[i] += 1.5;
+            }
             z.AddRange(zalt2);
             vals.AddRange(valsalt);
-            var xalt3 = DeepClone<List<double>>(x);
-            var yalt3 = DeepClone<List<double>>(y);
-            var zalt3 = DeepClone<List<double>>(z);
+            var xalt3 = DeepClone<List<double>>(xalt2);
+            var yalt3 = DeepClone<List<double>>(yalt2);
+            var zalt3 = DeepClone<List<double>>(zalt2);
             x.AddRange(xalt3);
-            y.AddRange(yalt3);
-            zalt3.ForEach(x => { x += 4.5; });
+            y.AddRange(yalt3); 
+            for (int i = 0; i < zalt3.Count; i++)
+            {
+                zalt3[i] += 1.5;
+            }
             z.AddRange(zalt3);
             vals.AddRange(valsalt);
+            dim[2] += 3;
         }
 
         public static T DeepClone<T>(T obj)
