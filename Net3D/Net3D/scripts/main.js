@@ -159,7 +159,8 @@ function initialize() {
     renderer.autoClear = false;
     renderer.setPixelRatio(window.devicePixelRatio);
 
-    container = document.getElementById('ThreeJS');
+    container = document.createElement('div');
+    document.body.appendChild(container);
     container.appendChild(renderer.domElement);
     renderer.setClearColor(0xeeeeee, 1);
     camera.position.x = 10;
@@ -405,19 +406,6 @@ function updateRay() {
 
 
 function render() {
-    if (buildLoad) {
-        addBuild();
-        buildLoad = false;
-    }
-    if (isoLoad) {
-        addIso();
-        isoLoad = false;
-    }
-    if (antennaLoad) {
-        addAntenna();
-        antennaLoad = false;
-    }
-
     //updateRay();
 
     controls.update();

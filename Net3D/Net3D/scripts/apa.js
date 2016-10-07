@@ -20,9 +20,7 @@ APAParser.load = function (src, callback, onerror) {
     })
     .done(function (data) {
         apa = data;
-        if (apa) {
-            antennaLoad = true;
-        }
+        addAntenna();
         //$.each(data, function (i, item) {
         //    alert("" + item.height);
         //});

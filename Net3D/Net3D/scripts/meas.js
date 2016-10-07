@@ -22,9 +22,7 @@ MEASParser.load = function (src, callback, onerror) {
         var worker = new THREE.SHPWorker();
         meas = worker.expand(data);
         meas = data;
-        if (meas) {
-            isoLoad = true;
-        }
+        addIso();
         //$.each(data, function (i, item) {
         //    alert("" + item.height);
         //});

@@ -52,9 +52,7 @@ ODAParser.prototype.parse = function (Buffer, src) {
     })
     .done(function (data) {
         oda = data;
-        if (oda) {
-            buildLoad = true;
-        }
+        addBuild();
         //$.each(data, function (i, item) {
         //    alert("" + item.height);
         //});

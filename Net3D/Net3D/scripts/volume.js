@@ -30,7 +30,7 @@ VolumeVisualizer.prototype.dot = function (values, min, max, res, step) {
     geom.addAttribute('color', new THREE.BufferAttribute(farben, 3))
     return new THREE.Points(geom, new THREE.PointsMaterial({
         vertexColors: THREE.VertexColors,
-        size: 1
+        size: 2
     }));
 }
 
