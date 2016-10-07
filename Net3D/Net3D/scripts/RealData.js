@@ -41,11 +41,50 @@ RealData.prototype.render = function () {
 
     scene.add(points);
 
+    this.addSpheres(points, 20);
+    this.addSpheres(points, 15);
+    this.addSpheres(points, 10);
+    this.addSpheres(points, 5);
+
     lowerBound = this.min[4];
     upperBound = this.max[4];
     var strip = new THREE.TextureLoader().load("/data/Colorstrip.png", this.addColorstrip);
     //var width = strip.image.width;
 };
+
+RealData.prototype.addSpheres = function (points, rad) {
+    var inter = [];
+    var spheregeom = new THREE.SphereGeometry(rad, 20, 20);
+    var faceindex = ['a', 'b', 'c'];
+    var f, pnt, vertexInd, weight, sum = 0;
+
+    for (var i = 0; i < spheregeom.faces.length; i++) {
+        f = spheregeom.faces[i]
+
+        for (var j = 0; j < 3; j++) {
+            vertexInd = f[faceindex[j]];
+            pnt = spheregeom.vertices[vertexInd];
+            sum = 0;
+            weight = 0;
+            for (var k = 0; k < points.geometry.vertices.length; k++) {
+                weight += points.geometry.colors[k].getHSL().h / (pnt.distanceTo(points.geometry.vertices[k]) * pnt.distanceTo(points.geometry.vertices[k]));
+                sum += 1 / (pnt.distanceTo(points.geometry.vertices[k]) * pnt.distanceTo(points.geometry.vertices[k]));
+            }
+            weight = weight / sum;
+            var col = new THREE.Color(0xffffff);
+            col.setHSL(weight, 1.0, 0.5);
+            f.vertexColors[j] = col;
+        }
+    }
+    var Sphere = new THREE.Mesh(spheregeom, new THREE.MeshBasicMaterial({
+        vertexColors: THREE.VertexColors,
+        transparent: true,
+        opacity: 0.4,
+        depthWrite: false
+    }));
+
+    scene.add(Sphere);
+}
 
 RealData.prototype.addColorstrip = function addColorstrip(texture) {
 

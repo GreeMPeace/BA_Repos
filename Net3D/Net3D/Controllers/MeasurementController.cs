@@ -31,10 +31,11 @@ namespace Net3D.Controllers
             var contents = System.IO.File.ReadAllText(HttpContext.Current.Server.MapPath(@"~/App_Data/Power_Fra_2_BS_1.txt"));
 
             var lines = contents.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] words;
 
             for (int i = 1; i < lines.Length; i++)
             {
-                var words = lines[i].Split(new char[] { ' ', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                words = lines[i].Split(new char[] { ' ', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries);
 
                 if (words.Length == 0)
                     continue;
@@ -50,7 +51,7 @@ namespace Net3D.Controllers
             }
 
             meas.fill();
-            meas.expand();
+            //meas.expand();
             fourdimlist<double> values = meas.extract();
 
             return Ok(values);

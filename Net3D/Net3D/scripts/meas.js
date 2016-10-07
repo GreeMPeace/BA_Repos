@@ -19,6 +19,8 @@ MEASParser.load = function (src, callback, onerror) {
         complete: function () { }
     })
     .done(function (data) {
+        var worker = new THREE.SHPWorker();
+        meas = worker.expand(data);
         meas = data;
         if (meas) {
             isoLoad = true;

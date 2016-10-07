@@ -114,44 +114,57 @@ p.createAntenna = function (obj) {
 };
 
 p.expand = function (values) {
-    var newValue = {};
-    var val1 = [], val2 = [], val3 = [], val4 = [];
-    var end = values.length;
-    newValue.x;
-    newValue.y;
-    newValue.z;
-    newValue.vals = [];
-    for (var i = 0; i < end; i++) {
-        newValue = {};
-        newValue.x = values[i].x;
-        newValue.y = values[i].y;
-        newValue.z = values[i].z + 1.5;
-        newValue.vals = values[i].vals;
-        val3.push(newValue);
-        newValue = {};
-        newValue.x = values[i].x;
-        newValue.y = values[i].y;
-        newValue.z = values[i].z + 3;
-        newValue.vals = values[i].vals;
-        val4.push(newValue);
-        newValue = {};
-        newValue.x = values[i].x;
-        newValue.y = values[i].y;
-        newValue.z = values[i].z - 1.5;
-        newValue.vals = values[i].vals;
-        val2.push(newValue);
-        newValue = {};
-        newValue.x = values[i].x;
-        newValue.y = values[i].y;
-        newValue.z = values[i].z - 3;
-        newValue.vals = values[i].vals;
-        val1.push(newValue);
+    if (values[0][0][0].length != 1)
+        return;
+
+    for (var n = 0; n < values.length; n++) {
+        for (var i = 0; i < values[n].length; i++) {
+            for (var j = 0; j< values[n][i].length; j++) {
+                    values[n][i][j].push(values[n][i][j][0]);
+                    values[n][i][j].push(values[n][i][j][0]);
+                    values[n][i][j].push(values[n][i][j][0]);
+                    values[n][i][j].push(values[n][i][j][0]);
+            }
+        }
     }
-    values = values.concat(val3);
-    values = values.concat(val4);
-    values = val2.concat(values);
-    values = val1.concat(values);
-    return values;
+    //var newValue = {};
+    //var val1 = [], val2 = [], val3 = [], val4 = [];
+    //var end = values.length;
+    //newValue.x;
+    //newValue.y;
+    //newValue.z;
+    //newValue.vals = [];
+    //for (var i = 0; i < end; i++) {
+    //    newValue = {};
+    //    newValue.x = values[i].x;
+    //    newValue.y = values[i].y;
+    //    newValue.z = values[i].z + 1.5;
+    //    newValue.vals = values[i].vals;
+    //    val3.push(newValue);
+    //    newValue = {};
+    //    newValue.x = values[i].x;
+    //    newValue.y = values[i].y;
+    //    newValue.z = values[i].z + 3;
+    //    newValue.vals = values[i].vals;
+    //    val4.push(newValue);
+    //    newValue = {};
+    //    newValue.x = values[i].x;
+    //    newValue.y = values[i].y;
+    //    newValue.z = values[i].z - 1.5;
+    //    newValue.vals = values[i].vals;
+    //    val2.push(newValue);
+    //    newValue = {};
+    //    newValue.x = values[i].x;
+    //    newValue.y = values[i].y;
+    //    newValue.z = values[i].z - 3;
+    //    newValue.vals = values[i].vals;
+    //    val1.push(newValue);
+    //}
+    //values = values.concat(val3);
+    //values = values.concat(val4);
+    //values = val2.concat(values);
+    //values = val1.concat(values);
+    //return values;
 };
 
 p.fill = function (values) {
