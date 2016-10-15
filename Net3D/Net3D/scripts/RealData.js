@@ -6,7 +6,7 @@
     this.vals = data.vals;
 }
 
-RealData.prototype.render = function () {
+RealData.prototype.display = function () {
     var length = 50;
     var xMiddle = (this.max[0] + this.min[0]) / 2;
     var yMiddle = (this.max[1] + this.min[1]) / 2;

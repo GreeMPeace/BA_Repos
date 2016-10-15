@@ -1,0 +1,54 @@
+﻿.drpbutton {
+    background-color: #4CAF50;
+    color: #FFFFFF;
+    text-align: center;
+    z-index: 2;
+    border: none;
+    padding: 7px 8px;
+    cursor: pointer;
+}
+
+.drpdown {
+    display: inline-block;
+    position: absolute;
+    cursor: pointer
+}
+
+.hudbutton {
+    display: inline-block;
+    width: 60px;
+    background-color: #4CAF50;
+    color: #FFFFFF;
+    text-align: center;
+    z-index: 2;
+    position: absolute;
+    padding: 7px 8px;;
+}
+
+.hudbutton:hover, .drpdown:hover .drpbutton{
+    background-color: #FFFFFF;
+    color: #4CAF50;
+}
+
+.drp-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 3;
+}
+.drp-content a:hover {
+    background-color: #E1E1E1;
+}
+
+.drp-content a {
+    color: black;
+    padding: 7px 8px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+.drpdown:hover .drp-content {
+    display: block;
+}

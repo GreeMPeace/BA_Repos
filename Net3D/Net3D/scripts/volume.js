@@ -34,6 +34,54 @@ VolumeVisualizer.prototype.dot = function (values, min, max, res, step) {
     }));
 }
 
+VolumeVisualizer.prototype.dotAntennas = function (values, min, max, res, step) {
+    var geom = new THREE.BufferGeometry();
+    var vertices = [], colors = [];
+    var num = {};
+    num.x = (max.x - min.x) * res.x + 1;
+    num.y = (max.y - min.y) * res.y + 1;
+    num.z = (max.z - min.z) * res.z + 1;
+    for (i = 0; i < num.x; i += step.x) {
+        for (j = 0; j < num.y; j += step.y) {
+            for (k = 0; k < num.z; k += step.z) {
+                var maxes = this.getMax(values, i, j, k);
+                if (maxes.maxVal == -1000)
+                    continue;
+                var value = maxes.index / values.length;
+                var color = new THREE.Color("hsl(0, 100%, 50%)");
+                color.setHSL(value, 1, 0.5);
+                vertices.push(min.x + i / res.x);
+                vertices.push(min.y + j / res.y);
+                vertices.push(min.z + k / res.z);
+                colors.push(color.r);
+                colors.push(color.g);
+                colors.push(color.b);
+            }
+        }
+    }
+    var positions = new Float32Array(vertices);
+    var farben = new Float32Array(colors);
+    geom.addAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geom.addAttribute('color', new THREE.BufferAttribute(farben, 3))
+    return new THREE.Points(geom, new THREE.PointsMaterial({
+        vertexColors: THREE.VertexColors,
+        size: 2
+    }));
+};
+
+VolumeVisualizer.prototype.getMax = function (vals, i, j, k) {
+    var maxAntenna = {};
+    maxAntenna.index = 0;
+    maxAntenna.maxVal = -1000;
+    for (var n = 0; n < vals.length; n++) {
+        if (vals[n][i][j][k] > maxAntenna.maxVal || n == 0) {
+            maxAntenna.maxVal = vals[n][i][j][k];
+            maxAntenna.index = n;
+        }
+    }
+    return maxAntenna;
+};
+
 VolumeVisualizer.prototype.cube = function (values, min, max, res, step) {
     var grid = {}, vertlist = new Array(12);
     var cubeindex;

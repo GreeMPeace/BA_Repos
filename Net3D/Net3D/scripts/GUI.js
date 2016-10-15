@@ -5,42 +5,32 @@
     xtar: 0.1,
     ytar: 0.1,
     ztar: 0.1,
-    xmouse: 0.1,
-    ymouse: 0.1,
     isocolor: "#00f0ff",
     source: '1',
     dots: true,
     isolevel: -79.0,
     loadReal: loadReal(),
-    loadFrank: loadFrankfurt()
+    loadFrank: loadFrankfurt(),
+    mode: 'single'
 };
 
 function loadFrankfurt() {
     return function () {
-        var loader = new ODAParser();
-        loader.parse();
-        MEASParser.load();
+        var Inter = new GuiInterface();
+        Inter.loadBuildings();
+        if(guiController.mode)
+        Inter.loadSimulation();
     }
 }
 
 function loadReal() {
     return function () {
-        var uri = 'api/Measurement/GetReal/2600_urban_Prx_Aachen?end=csv';
-        $.ajax({
-            url: uri,
-            type: "GET",
-            datatype: "json",
-            beforeSend: function () { },
-            complete: function () { }
-        })
-        .done(function (data) {
-            var ren = new RealData(data);
-            ren.render();
-        })
-        .fail(function (a, b, c) {
-            alert("Error")
-        });
+        var Inter = new GuiInterface();
+        Inter.loadRealData();
     }
+}
+
+function makeMax() {
 }
 
 var gui = new dat.GUI();
@@ -60,11 +50,6 @@ function setupGui() {
     folder.add(guiController, "ytar").step(0.25).name("Target Y:").onFinishChange(changeVals);
     folder.add(guiController, "ztar").step(0.25).name("Target Z:").onFinishChange(changeVals);
 
-    folder = gui.addFolder("Mouse");
-
-    folder.add(guiController, "xmouse").step(0.01).name("Mouse X:");
-    folder.add(guiController, "ymouse").step(0.01).name("Mouse Y:");
-
     folder = gui.addFolder("Visuals");
 
     folder.addColor(guiController, "isocolor").onChange(changeVals);
@@ -74,6 +59,7 @@ function setupGui() {
 
     gui.add(guiController, "loadReal").name("Load Real Data");
     gui.add(guiController, "loadFrank").name("Load Frankfurt");
+    gui.add(guiController, "mode", ['single', 'max', 'Distribution']).name("Mode").onFinishChange(changeIso);
     return;
 
 }
@@ -93,50 +79,102 @@ function changeVals() {
 
 function changeDots() {
     if (guiController.dots) {
-        var Volumepainter = new VolumeVisualizer();
-        var volume = Volumepainter.dot(meas[Number(guiController.source) - 1], min, max, res, step);
-        volume.name = "dots";
-        scene.add(volume);
+        var olddots = scene.getObjectByName("dots");
+        if (olddots) {
+            olddots.visible = true;
+        }
+        //var Volumepainter = new VolumeVisualizer();
+        //var volume = Volumepainter.dot(meas[Number(guiController.source) - 1], min, max, res, step);
+        //volume.name = "dots";
+        //scene.add(volume);
     }
     else {
         var olddots = scene.getObjectByName("dots");
         if (olddots) {
-            olddots.geometry.dispose();
-            scene.remove(olddots);
+            olddots.visible = false;
         }
     }
 }
 
 function changeIso() {
-    if (meas) {
-        walker = new CubeMarcher();
-        var index = Number(guiController.source) - 1;
-        var geosurf = new walker.march(meas[index], guiController.isolevel, min, max, res);
-        var isosurf = new THREE.Mesh(geosurf, new THREE.MeshBasicMaterial({
-            color: guiController.isocolor,
-            opacity: 0.8,
-            transparent: true,
-            side: THREE.DoubleSide
-        }));
-        isosurf.name = "isosurf";
-        var oldsurf = scene.getObjectByName("isosurf");
-        oldsurf.geometry.dispose();
-        scene.remove(oldsurf);
-        scene.add(isosurf);
-        if (guiController.dots) {
-            var olddots = scene.getObjectByName("dots");
-            if (olddots) {
-                olddots.geometry.dispose();
-                scene.remove(olddots);
+    var Simu = new SimulationLoader();
+    Simu.visualize();
+    //if (meas) {
+    //    if (guiController.mode == 'single') {
+    //        walker = new CubeMarcher();
+    //        var index = Number(guiController.source) - 1;
+    //        var geosurf = new walker.march(meas[index], guiController.isolevel, min, max, res);
+    //        var isosurf = new THREE.Mesh(geosurf, new THREE.MeshBasicMaterial({
+    //            color: guiController.isocolor,
+    //            opacity: 0.8,
+    //            transparent: true,
+    //            side: THREE.DoubleSide
+    //        }));
+    //        isosurf.name = "isosurf";
+    //        var oldsurf = scene.getObjectByName("isosurf");
+    //        if (oldsurf) {
+    //            oldsurf.geometry.dispose();
+    //            scene.remove(oldsurf);
+    //        }
+    //        scene.add(isosurf);
 
-                var Volumepainter = new VolumeVisualizer();
-                var volume = Volumepainter.dot(meas[Number(guiController.source) - 1], min, max, res, step);
-                volume.name = "dots";
-                scene.add(volume);
-            }
-        }
-        return;
-    }
+    //        var olddots = scene.getObjectByName("dots");
+    //        if (olddots) {
+    //            olddots.geometry.dispose();
+    //            scene.remove(olddots);
+    //        }
+    //        var Volumepainter = new VolumeVisualizer();
+    //        var volume = Volumepainter.dot(meas[Number(guiController.source) - 1], min, max, res, step);
+    //        volume.name = "dots";
+    //        if (!guiController.dots) {
+    //            volume.visible = false;
+    //        }
+    //        scene.add(volume);
+
+    //    }
+    //}
+    //if (guiController.mode == 'max') {
+            
+    //    var oldsurf = scene.getObjectByName("isosurf");
+    //    if (oldsurf) {
+    //        oldsurf.geometry.dispose();
+    //        scene.remove(oldsurf);
+    //    }
+    //    var olddots = scene.getObjectByName("dots");
+    //    if (olddots) {
+    //        olddots.geometry.dispose();
+    //        scene.remove(olddots);
+    //    }
+    //    var loadSimu = new SimulationLoader();
+    //    if (guiController.dots) {
+    //        loadSimu.addMaxPoints(true);
+    //    }
+    //    else{
+    //        loadSimu.addMaxPoints(false);
+    //    }
+    //}
+    //if (guiController.mode == 'Distribution') {
+            
+    //    var oldsurf = scene.getObjectByName("isosurf");
+    //    if (oldsurf) {
+    //        oldsurf.geometry.dispose();
+    //        scene.remove(oldsurf);
+    //    }
+    //    var olddots = scene.getObjectByName("dots");
+    //    if (olddots) {
+    //        olddots.geometry.dispose();
+    //        scene.remove(olddots);
+    //    }
+    //    var Volumepainter = new VolumeVisualizer();
+    //    var volume = Volumepainter.dotAntennas(meas, min, max, res, step);
+    //    volume.name = "dots";
+                
+    //    if (!guiController.dots) {
+    //        volume.visible = false;
+    //    }
+    //    scene.add(volume);
+    //}
+    
 }
 
 function updateGUI(position, target, iso) {
@@ -146,8 +184,6 @@ function updateGUI(position, target, iso) {
     guiController.xtar = target.x;
     guiController.ytar = target.y;
     guiController.ztar = target.z;
-    guiController.xmouse = mouse.x;
-    guiController.ymouse = mouse.y;
     if (iso) {
         var template = [];
         for (var i = 0; i < meas.length; i++)
@@ -162,8 +198,5 @@ function updateGUI(position, target, iso) {
     }
     for (var i = 0; i < gui.__folders.Target.__controllers.length; i++) {
         gui.__folders.Target.__controllers[i].updateDisplay();
-    }
-    for (var i = 0; i < gui.__folders.Mouse.__controllers.length; i++) {
-        gui.__folders.Mouse.__controllers[i].updateDisplay();
     }
 }

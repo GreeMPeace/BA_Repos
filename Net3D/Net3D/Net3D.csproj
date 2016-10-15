@@ -113,6 +113,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\Power_Fra_2_BS_1.txt" />
+    <Content Include="css\hud.css" />
     <Content Include="Global.asax" />
     <Content Include="packages.config" />
     <Content Include="ApplicationInsights.config">
@@ -131,14 +132,19 @@
     <Content Include="index.html" />
     <Content Include="scripts\ai.0.22.19-build00125.js" />
     <Content Include="scripts\ai.0.22.19-build00125.min.js" />
+    <Content Include="scripts\Antenna.js" />
     <Content Include="scripts\apa.js" />
+    <Content Include="scripts\Buildings.js" />
     <Content Include="scripts\dat.gui.min.js" />
     <Content Include="scripts\dbf.js" />
     <Content Include="scripts\graphics.js" />
     <Content Include="scripts\GUI.js" />
-    <Content Include="scripts\main.js" />
+    <Content Include="scripts\Init.js" />
+    <Content Include="scripts\Loader.js" />
+    <Content Include="scripts\main_old.js" />
     <Content Include="scripts\MarchingCubes.js" />
     <Content Include="scripts\meas.js" />
+    <Content Include="scripts\Simulation.js" />
     <Content Include="scripts\MouseControls.js" />
     <Content Include="scripts\oda.js" />
     <Content Include="scripts\OrbitControls.js" />
