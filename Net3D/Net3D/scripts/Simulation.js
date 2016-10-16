@@ -70,7 +70,7 @@ SimulationLoader.prototype.visualize = function () {
                 this.addMaxPoints(false);
             }
         }
-        if (guiController.mode == 'Distribution') {
+        if (guiController.mode == 'distribution') {
 
             var oldsurf = scene.getObjectByName("isosurf");
             if (oldsurf) {

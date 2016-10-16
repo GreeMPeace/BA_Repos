@@ -6,23 +6,25 @@
     border: none;
     padding: 7px 8px;
     cursor: pointer;
+    min-width: 84px;
 }
 
 .drpdown {
     display: inline-block;
-    position: absolute;
-    cursor: pointer
+    cursor: pointer;
+    margin: 5px;
 }
 
 .hudbutton {
     display: inline-block;
-    width: 60px;
+    min-width: 70px;
     background-color: #4CAF50;
     color: #FFFFFF;
     text-align: center;
     z-index: 2;
-    position: absolute;
-    padding: 7px 8px;;
+    padding: 7px 8px;
+    margin: 5px;
+    cursor: pointer;
 }
 
 .hudbutton:hover, .drpdown:hover .drpbutton{
@@ -36,6 +38,7 @@
     background-color: #f9f9f9;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 3;
+    min-width: 70px;
 }
 .drp-content a:hover {
     background-color: #E1E1E1;

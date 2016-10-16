@@ -1,4 +1,4 @@
-﻿var scene, hudscene, width, height, camera, hudcamera, renderer, container;
+﻿var scene, hudscene, width, height, camera, hudcamera, renderer, container, hudcon;
 var meas;
 var buildings = [], antennas = [];
 
@@ -91,35 +91,53 @@ function initialize() {
     hudelement.style.backgroundColor = "#FFFFFF"
     container.appendChild(hudelement);
 
-    var loadButton = document.createElement('div');
-    loadButton.className = "hudbutton";
-    loadButton.textContent = "Load Frankfurt";
-    loadButton.style.left = "10px";
-    loadButton.style.top = "10px";
-    loadButton.addEventListener("click", guiController.loadFrank);
-    container.appendChild(loadButton);
+    hudcon = new HUDController();
+    hudcon.addButton("loadFrank", "Load", guiController.loadFrank);
 
-    var chooseArea = document.createElement('div');
-    chooseArea.className = "drpdown";
-    chooseArea.style.left = "300px";
-    chooseArea.style.top = "10px";
-    var chooseButton = document.createElement('button');
-    chooseButton.className = "drpbutton";
-    chooseButton.textContent = "Choose Mode";
-    chooseArea.appendChild(chooseButton);
-    var ItemArea = document.createElement('div');
-    ItemArea.className = "drp-content";
-    var elem = document.createElement('a');
-    elem.textContent = "Item 1";
-    ItemArea.appendChild(elem);
-    var elem = document.createElement('a');
-    elem.textContent = "BiggerElement";
-    ItemArea.appendChild(elem);
-    var elem = document.createElement('a');
-    elem.textContent = "S";
-    ItemArea.appendChild(elem);
-    chooseArea.appendChild(ItemArea);
-    container.appendChild(chooseArea);
+    var content = ["Mode: Single", "Single", "Maximum", "Distribution"];
+    var funcs = [null, function () {
+        guiController.mode = 'single';
+        var loader = new SimulationLoader();
+        loader.visualize();
+    }, function () {
+        guiController.mode = 'max';
+        var loader = new SimulationLoader();
+        loader.visualize();
+    }, function () {
+        guiController.mode = 'distribution';
+        var loader = new SimulationLoader();
+        loader.visualize();
+    }];
+    hudcon.addDropdown("modes", content, funcs);
+    //var loadButton = document.createElement('div');
+    //loadButton.className = "hudbutton";
+    //loadButton.textContent = "Load Frankfurt";
+    ////loadButton.style.left = "10px";
+    ////loadButton.style.top = "10px";
+    //loadButton.addEventListener("click", guiController.loadFrank);
+    //container.appendChild(loadButton);
+
+    //var chooseArea = document.createElement('div');
+    //chooseArea.className = "drpdown";
+    ////chooseArea.style.left = "300px";
+    ////chooseArea.style.top = "10px";
+    //var chooseButton = document.createElement('button');
+    //chooseButton.className = "drpbutton";
+    //chooseButton.textContent = "Choose Mode";
+    //chooseArea.appendChild(chooseButton);
+    //var ItemArea = document.createElement('div');
+    //ItemArea.className = "drp-content";
+    //var elem = document.createElement('a');
+    //elem.textContent = "Item 1";
+    //ItemArea.appendChild(elem);
+    //var elem = document.createElement('a');
+    //elem.textContent = "BiggerElement";
+    //ItemArea.appendChild(elem);
+    //var elem = document.createElement('a');
+    //elem.textContent = "S";
+    //ItemArea.appendChild(elem);
+    //chooseArea.appendChild(ItemArea);
+    //container.appendChild(chooseArea);
 }
 
 function onWindowResize() {

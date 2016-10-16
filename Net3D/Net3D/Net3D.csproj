@@ -139,6 +139,7 @@
     <Content Include="scripts\dbf.js" />
     <Content Include="scripts\graphics.js" />
     <Content Include="scripts\GUI.js" />
+    <Content Include="scripts\HUDController.js" />
     <Content Include="scripts\Init.js" />
     <Content Include="scripts\Loader.js" />
     <Content Include="scripts\main_old.js" />
