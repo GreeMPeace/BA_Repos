@@ -200,7 +200,7 @@ THREE.OrbitControls = function ( object, domElement ) {
 				lastQuaternion.copy( scope.object.quaternion );
 				zoomChanged = false;
 
-				updateGUI(position, scope.target, false);
+				hudcon.updateData(position, scope.target);
 
 				return true;
 

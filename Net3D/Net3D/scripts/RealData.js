@@ -88,43 +88,64 @@ RealData.prototype.addSpheres = function (points, rad) {
 
 RealData.prototype.addColorstrip = function addColorstrip(texture) {
 
-    texture.minFilter = THREE.LinearFilter;
-    material = new THREE.SpriteMaterial({
-        //color: 0xeeeeee,
-        map: texture
-    });
-    var imgwidth = material.map.image.width;
-    var imgheight = material.map.image.height;
+    var hudelement = document.createElement('div');
+    var picture = document.createElement('img');
+    var left = document.createElement('div');
+    var right = document.createElement('div');
+    left.innerText = lowerBound.toFixed(2) + " dB";
+    left.style.position = "absolute";
+    left.style.left = "0px";
+    right.innerText = upperBound.toFixed(2) + " dB";
+    right.style.position = "absolute";
+    right.style.right = "0px";
+    hudelement.appendChild(picture);
+    hudelement.appendChild(left);
+    hudelement.appendChild(right);
+    picture.setAttribute("src", "data/Colorstrip.png");
+    hudelement.style.position = "absolute";
+    hudelement.style.bottom = '20px';
+    hudelement.style.right = '5px';
+    hudelement.style.zIndex = "2";
+    hudelement.style.backgroundColor = "#FFFFFF"
+    container.appendChild(hudelement);
 
-    var sprite = new THREE.Sprite(material);
-    sprite.scale.set(imgwidth, imgheight, 1);
-    sprite.position.set(width / 2 - imgwidth / 2 - 5, -height / 2 + 1.5 * imgheight + 5, 1);
-    sprite.name = "ColorstripCol";
+    //texture.minFilter = THREE.LinearFilter;
+    //material = new THREE.SpriteMaterial({
+    //    //color: 0xeeeeee,
+    //    map: texture
+    //});
+    //var imgwidth = material.map.image.width;
+    //var imgheight = material.map.image.height;
 
-    hudscene.add(sprite);
+    //var sprite = new THREE.Sprite(material);
+    //sprite.scale.set(imgwidth, imgheight, 1);
+    //sprite.position.set(width / 2 - imgwidth / 2 - 5, -height / 2 + 1.5 * imgheight + 5, 1);
+    //sprite.name = "ColorstripCol";
 
-    var canvas = document.createElement('canvas');
-    canvas.width = imgwidth;
-    canvas.height = imgheight;
-    var ctx = canvas.getContext('2d');
-    ctx.font = "18px Arial";
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(0, 0, imgwidth, imgheight);
-    ctx.fillStyle = "#000000";
-    ctx.fillText(lowerBound.toFixed(2) + "dB", 4, canvas.height/2 + 9);
-    var metrics = ctx.measureText(upperBound.toFixed(2) + "dB")
-    ctx.fillText(upperBound.toFixed(2) + "dB", canvas.width - metrics.width - 4, canvas.height);
+    //hudscene.add(sprite);
 
-    texture = new THREE.Texture(canvas);
-    texture.needsUpdate = true;
+    //var canvas = document.createElement('canvas');
+    //canvas.width = imgwidth;
+    //canvas.height = imgheight;
+    //var ctx = canvas.getContext('2d');
+    //ctx.font = "18px Arial";
+    //ctx.fillStyle = "#ffffff";
+    //ctx.fillRect(0, 0, imgwidth, imgheight);
+    //ctx.fillStyle = "#000000";
+    //ctx.fillText(lowerBound.toFixed(2) + "dB", 4, canvas.height/2 + 9);
+    //var metrics = ctx.measureText(upperBound.toFixed(2) + "dB")
+    //ctx.fillText(upperBound.toFixed(2) + "dB", canvas.width - metrics.width - 4, canvas.height);
 
-    var SprMat = new THREE.SpriteMaterial({ map: texture });
-    sprite = new THREE.Sprite(SprMat);
-    sprite.scale.set(imgwidth, imgheight, 1);
-    sprite.position.set(width / 2 - imgwidth / 2 - 5, -height / 2 + imgheight / 2 + 5, 1);
-    sprite.name = "ColorstripNum";
+    //texture = new THREE.Texture(canvas);
+    //texture.needsUpdate = true;
 
-    hudscene.add(sprite);
+    //var SprMat = new THREE.SpriteMaterial({ map: texture });
+    //sprite = new THREE.Sprite(SprMat);
+    //sprite.scale.set(imgwidth, imgheight, 1);
+    //sprite.position.set(width / 2 - imgwidth / 2 - 5, -height / 2 + imgheight / 2 + 5, 1);
+    //sprite.name = "ColorstripNum";
+
+    //hudscene.add(sprite);
 
 };
 

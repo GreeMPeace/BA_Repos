@@ -1,18 +1,13 @@
 ﻿guiController = {
-    xpos: 0.1,
-    ypos: 0.1,
-    zpos: 0.1,
-    xtar: 0.1,
-    ytar: 0.1,
-    ztar: 0.1,
     isocolor: "#00f0ff",
     source: '1',
     dots: true,
     isolevel: -79.0,
-    loadReal: loadReal(),
-    loadFrank: loadFrankfurt(),
-    mode: 'single'
+    mode: 'single',
+    registered: []
 };
+
+var Regdialog;
 
 function loadFrankfurt() {
     return function () {
@@ -33,47 +28,238 @@ function loadReal() {
 function makeMax() {
 }
 
-var gui = new dat.GUI();
-
 function setupGui() {
-    var folder;
 
-    folder = gui.addFolder("Position");
+    Regdialog = $("#register-dialog-form").dialog({
+        autoOpen: false,
+        height: 500,
+        width: 500,
+        modal: true,
+        buttons: {
+            "Register Dataset": registration,
+            Cancel: function () {
+                Regdialog.dialog("close");
+            }
+        },
+    });
 
-    folder.add(guiController, "xpos").step(0.25).name("Position X:").onFinishChange(changeVals);
-    folder.add(guiController, "ypos").step(0.25).name("Position Y:").onFinishChange(changeVals);
-    folder.add(guiController, "zpos").step(0.25).name("Position Z:").onFinishChange(changeVals);
+    Loaddialog = $("#load-dialog-form").dialog({
+        autoOpen: false,
+        height: 400,
+        width: 400,
+        modal: true,
+        buttons: {
+            "Submit": loadordel,
+            Cancel: function () {
+                Loaddialog.dialog("close");
+            }
+        },
+    });
 
-    folder = gui.addFolder("Target");
+    Datadialog = $("#data-dialog-form").dialog({
+        autoOpen: false,
+        height: 400,
+        width: 400,
+        modal: true,
+        buttons: {
+            "Submit": function () {
+                changeVals();
+                Datadialog.dialog("close");
+            },
+            Cancel: function () {
+                Datadialog.dialog("close");
+            }
+        },
+    });
 
-    folder.add(guiController, "xtar").step(0.25).name("Target X:").onFinishChange(changeVals);
-    folder.add(guiController, "ytar").step(0.25).name("Target Y:").onFinishChange(changeVals);
-    folder.add(guiController, "ztar").step(0.25).name("Target Z:").onFinishChange(changeVals);
 
-    folder = gui.addFolder("Visuals");
+    loadRegisteredSets();
 
-    folder.addColor(guiController, "isocolor").onChange(changeVals);
-    folder.add(guiController, "isolevel", -120, -20, 1).onFinishChange(changeIso);
-    folder.add(guiController, "dots").name("Dotcloud:").onChange(changeDots);
-    folder.add(guiController, "source", []).name("Dataset:").onChange(changeIso);
+    hudcon = new HUDController();
+    hudcon.addButton("register", "Register", function () { Regdialog.dialog("open") });
+    hudcon.addButton("load", "Load/ Del", function () {
+        var name = $("#loadname");
+        name.empty();
+        for (var i = 0; i < guiController.registered.length; i++) {
+            var option = $("<option></option>").text(guiController.registered[i]).val(guiController.registered[i]);
+            name.append(option);
+        }
+        Loaddialog.dialog("open");
+    });
 
-    gui.add(guiController, "loadReal").name("Load Real Data");
-    gui.add(guiController, "loadFrank").name("Load Frankfurt");
-    gui.add(guiController, "mode", ['single', 'max', 'Distribution']).name("Mode").onFinishChange(changeIso);
+    var modecontent = ["Mode: Single", "Single", "Maximum", "Distribution"];
+    var modefuncs = [null, function () {
+        guiController.mode = 'single';
+        var loader = new SimulationLoader();
+        loader.visualize();
+        hudcon.elements["modes"].children[0].textContent = "Mode: Single";
+    }, function () {
+        guiController.mode = 'max';
+        var loader = new SimulationLoader();
+        loader.visualize();
+        hudcon.elements["modes"].children[0].textContent = "Mode: Max";
+    }, function () {
+        guiController.mode = 'distribution';
+        var loader = new SimulationLoader();
+        loader.visualize();
+        hudcon.elements["modes"].children[0].textContent = "Mode: Distr";
+    }];
+    hudcon.addDropdown("modes", modecontent, modefuncs);
+
+    hudcon.addData(function () {
+        $("#xcoord").val(camera.position.x);
+        $("#ycoord").val(camera.position.y);
+        $("#zcoord").val(camera.position.z);
+        $("#xtar").val(controls.target.x);
+        $("#ytar").val(controls.target.y);
+        $("#ztar").val(controls.target.z);
+        $("#isolevel").val(guiController.isolevel);
+        $("#isocolor").val(guiController.isocolor.replace("0x", "#"));
+        Datadialog.dialog("open");
+    });
     return;
+}
 
+function loadordel() {
+    var name = $("#loadname");
+    var type2 = $("#loadtype2");
+    if (type2[0].checked) {
+        var uri = "/api/Dataset/Remove/" + name[0].value;
+
+        $.ajax({
+            url: uri,
+            type: "DELETE",
+            datatype: "json"
+        })
+        .done(function (data) {
+            var index = guiController.registered.indexOf(data);
+            guiController.registered.splice(index, 1);
+        })
+        .fail(function () {
+            alert("Could not be deleted!");
+        });
+    }
+    else {
+        var uri = "/api/Dataset/Get/" + name[0].value;
+
+        $.ajax({
+            url: uri,
+            type: "GET",
+            datatype: "json"
+        })
+        .fail(function () {
+            alert("Could not get the Data.")
+        })
+        .done(function (data) {
+            var load = new GuiInterface();
+
+            if (data.data[3] != "none")
+                load.loadBuildings(data.data[3]);
+
+            if (data.data[2] == "simulation")
+                load.loadSimulation(data.data[1]);
+            else
+                load.loadRealData(data.data[1]);
+        });
+    }
+}
+
+function registration() {
+    var name = $("#name");
+    var datafile = $("#data");
+    var simtype = $("#type1");
+    var realtype = $("#type2");
+    var builds = $("#building");
+    var tip = $("#registerTips");
+    var error = "";
+
+    var data = [];
+    if (name[0].value != "")
+        data.push(name[0].value);
+    else
+        error = "Enter a name";
+    if (datafile[0].files.length == 1)
+        data.push(datafile[0].files[0].name);
+    else
+        error = "Enter a path";
+    if (simtype[0].checked)
+        data.push(simtype[0].value);
+    else
+        data.push(realtype[0].value);
+    if (builds[0].files.length == 1)
+        data.push(builds[0].files[0].name);
+    else
+        data.push("none");
+
+    if (error != "") {
+        tip[0].value = error;
+        return;
+    }
+
+    var uri = "api/Dataset/Register"
+    $.ajax({
+        url: uri,
+        type: "POST",
+        datatype: "json",
+        data: { data: data }
+    })
+    .fail(function () {
+        alert("Error");
+    })
+    .done(function (data) {
+        guiController.registered.push(data);
+    });
+}
+
+function loadRegisteredSets() {
+    var uri = "/api/Dataset/GetAll"
+
+    $.ajax({
+        url: uri,
+        type: "GET",
+        datatype: "json"
+    })
+    .done(function (data) {
+        for (var i = 0; i < data.length; i++) {
+            guiController.registered.push(data[i]);
+        }
+    });
 }
 
 function changeVals() {
+    var x = $("#xcoord");
+    var y = $("#ycoord");
+    var z = $("#zcoord");
+    var xtar = $("#xtar");
+    var ytar = $("#ytar");
+    var ztar = $("#ztar");
+    var iso = $("#isolevel");
+    var col = $("#isocolor");
     var isosurf = scene.getObjectByName("isosurf");
-    camera.position.x = guiController.xpos;
-    camera.position.y = guiController.ypos;
-    camera.position.z = guiController.zpos;
-    controls.target.x = guiController.xtar;
-    controls.target.y = guiController.ytar;
-    controls.target.z = guiController.ztar;
+    if (x[0].value != "")
+        camera.position.x = Number(x[0].value);
+    if (y[0].value != "")
+        camera.position.y = Number(y[0].value);
+    if (z[0].value != "")
+        camera.position.z = Number(z[0].value);
+    if (xtar[0].value != "")
+        controls.target.x = Number(xtar[0].value);
+    if (ytar[0].value != "")
+        controls.target.y = Number(ytar[0].value);
+    if (ztar[0].value != "")
+        controls.target.z = Number(ztar[0].value);
+    if (iso[0].value != "") {
+        var temp = guiController.isolevel;
+        guiController.isolevel = Number(iso[0].value);
+        if (isosurf)
+        {
+            changeIso();
+        }
+    }
     if (isosurf)
-        isosurf.material.color.setHex(guiController.isocolor.replace('#', '0x'));
+        isosurf.material.color.setHex(col[0].value.replace('#', '0x'));
+
+    hudcon.updateData(camera.position, controls.target);
     return;
 }
 
@@ -83,10 +269,6 @@ function changeDots() {
         if (olddots) {
             olddots.visible = true;
         }
-        //var Volumepainter = new VolumeVisualizer();
-        //var volume = Volumepainter.dot(meas[Number(guiController.source) - 1], min, max, res, step);
-        //volume.name = "dots";
-        //scene.add(volume);
     }
     else {
         var olddots = scene.getObjectByName("dots");
@@ -177,26 +359,7 @@ function changeIso() {
     
 }
 
-function updateGUI(position, target, iso) {
-    guiController.xpos = position.x;
-    guiController.ypos = position.y;
-    guiController.zpos = position.z;
-    guiController.xtar = target.x;
-    guiController.ytar = target.y;
-    guiController.ztar = target.z;
-    if (iso) {
-        var template = [];
-        for (var i = 0; i < meas.length; i++)
-            template.push(i + 1);
+//function updateGUI(position, target, iso) {
+//    hudcon.updateData(position, target);
+//}
 
-        gui.__folders.Visuals.__controllers[3].remove();
-        gui.__folders.Visuals.__controllers.pop();
-        gui.__folders.Visuals.add(guiController, "source", template)
-    }
-    for (var i = 0; i < gui.__folders.Position.__controllers.length; i++) {
-        gui.__folders.Position.__controllers[i].updateDisplay();
-    }
-    for (var i = 0; i < gui.__folders.Target.__controllers.length; i++) {
-        gui.__folders.Target.__controllers[i].updateDisplay();
-    }
-}

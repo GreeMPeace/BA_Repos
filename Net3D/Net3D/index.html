@@ -4,6 +4,7 @@
     <title>Network Visualizer</title>
 	<meta charset="utf-8" />
     <meta content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <style>
         body {
             font-family: Monospace;
@@ -14,10 +15,20 @@
         }
     </style>
     <link rel="stylesheet" type="text/css" href="css/hud.css">
+
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+    $(function () {
+        $("input.radio").checkboxradio({
+            icon: false
+        });
+    });
+    </script>
 </head>
 <body>
 <!--    <div style="position: absolute; left:0px; top:0px";" id="ThreeJS">Canvas does not seem to work</div>  -->
-    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+
     <script src="scripts/three.js"></script>
     <script src="scripts/dbf.js"></script>
     <script src="scripts/shp.js"></script>
@@ -33,7 +44,82 @@
     <script src="scripts/Buildings.js"></script>
     <script src="scripts/Simulation.js"></script>
     <script src="scripts/HUDController.js"></script>
-    <script src="scripts/Init.js"></script>
     <script src="scripts/Loader.js"></script>
+
+    <div id="register-dialog-form" title="Register Measurement Data">
+        <p id="registerTips" class="validateTips">Name and Datasset required.</p>
+
+        <form>
+            <fieldset>
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" class="text ui-widget-content ui-corner-all" />
+                <label for="data">Raw Data</label>
+                <input type="file" name="data" id="data" class="file ui-widget-content ui-corner-all">
+                <fieldset>
+                    <legend>What kind of dataset is given?</legend>
+                    <label for="type1">Simulation</label>
+                    <input type="radio" name="datatype" id="type1" value="simulation" class="radio ui-widget-content ui-corner-all" checked>
+                    <label for="type2">Measured Data</label>
+                    <input type="radio" name="datatype" id="type2" value="real" class="radio ui-widget-content ui-corner-all">
+                </fieldset>
+                <label for="building">Building Data</label>
+                <input type="file" name="building" id="building" class="file ui-widget-content ui-corner-all">
+
+                <!-- Allow form submission with keyboard without duplicating the dialog button -->
+                <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+            </fieldset>
+        </form>
+    </div>
+
+    <div id="load-dialog-form" title="Load or Delete Data">
+        <p class="validateTips">Choose a Data Set</p>
+
+        <form>
+            <fieldset>
+                <label for="loadname">Name</label>
+                <select id="loadname" name="loadname" class="select ui-widget-content ui-corner-all">
+                    <option value="test">Test</option>
+                </select>
+                <fieldset>
+                    <legend>Load or Delete</legend>
+                    <label for="loadtype1">Load</label>
+                    <input type="radio" name="loadtype" id="loadtype1" value="load" class="radio ui-widget-content ui-corner-all" checked>
+                    <label for="loadtype2">Delete</label>
+                    <input type="radio" name="loadtype" id="loadtype2" value="delete" class="radio ui-widget-content ui-corner-all">
+                </fieldset>
+                <!-- Allow form submission with keyboard without duplicating the dialog button -->
+                <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+            </fieldset>
+        </form>
+    </div>
+
+    <div id="data-dialog-form" title="Change Visuals">
+        <p class="validateTips">Change as you see fit.</p>
+
+        <form>
+            <fieldset>
+                <label for="xcoord">x:</label>
+                <input type="number" step="0.5" name="xcoord" id="xcoord" class="number ui-widget-content ui-corner-all" />
+                <label for="ycoord">y:</label>
+                <input type="number" step="0.5" name="ycoord" id="ycoord" class="number ui-widget-content ui-corner-all" />
+                <label for="zcoord">z:</label>
+                <input type="number" step="0.5" name="zcoord" id="zcoord" class="number ui-widget-content ui-corner-all" />
+                <label for="xtar">Target x:</label>
+                <input type="number" step="0.5" name="xtar" id="xtar" class="number ui-widget-content ui-corner-all" />
+                <label for="ytar">Target y:</label>
+                <input type="number" step="0.5" name="ytar" id="ytar" class="number ui-widget-content ui-corner-all" />
+                <label for="ztar">Target z:</label>
+                <input type="number" step="0.1" name="ztar" id="ztar" class="number ui-widget-content ui-corner-all" />
+                <label for="xcoord">Isolevel:</label>
+                <input type="number" step="0.5" name="isolevel" id="isolevel" class="number ui-widget-content ui-corner-all" />
+                <label for="isocolor">Isolevel:</label>
+                <input type="color" name="isocolor" id="isocolor" class="color ui-widget-content ui-corner-all" />
+                <!-- Allow form submission with keyboard without duplicating the dialog button -->
+                <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+            </fieldset>
+        </form>
+    </div>
+
+    <script src="scripts/Init.js"></script>
 </body>
 </html>

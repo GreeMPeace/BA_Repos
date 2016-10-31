@@ -1,7 +1,7 @@
 ﻿GuiInterface = function () { };
 
-GuiInterface.prototype.loadBuildings = function () {
-    var uri = 'api/Building/Get/Frakfurt';
+GuiInterface.prototype.loadBuildings = function (path) {
+    var uri = 'api/Building/Get/' + path.replace(".", ";");
     $.ajax({
         url: uri,
         type: "GET",
@@ -18,8 +18,8 @@ GuiInterface.prototype.loadBuildings = function () {
     });
 };
 
-GuiInterface.prototype.loadSimulation = function () {
-    var uri = 'api/Measurement/GetSimulation/703-532-1';
+GuiInterface.prototype.loadSimulation = function (path) {
+    var uri = 'api/Measurement/GetSimulation/' + path.replace(".", ";") + "?dimensions=703-532-1";
     $.ajax({
         url: uri,
         type: "GET",
@@ -31,7 +31,6 @@ GuiInterface.prototype.loadSimulation = function () {
         var Simul = new SimulationLoader();
         Simul.expand(data);
         meas = data;
-        updateGUI(camera.position, controls.target, true);
         Simul.visualize();
     })
     .fail(function (a, b, c) {
@@ -39,8 +38,8 @@ GuiInterface.prototype.loadSimulation = function () {
     });
 };
 
-GuiInterface.prototype.loadRealData = function () {
-    var uri = 'api/Measurement/GetReal/2600_urban_Prx_Aachen?end=csv';
+GuiInterface.prototype.loadRealData = function (path) {
+    var uri = 'api/Measurement/GetReal/' + path.replace(".", ";");
     $.ajax({
         url: uri,
         type: "GET",
@@ -57,7 +56,7 @@ GuiInterface.prototype.loadRealData = function () {
     });
 };
 
-GuiInterface.prototype.loadAntenna = function () {
+GuiInterface.prototype.loadAntenna = function (path) {
     var uri = 'api/Antenna/Get';
     var result;
     $.ajax({

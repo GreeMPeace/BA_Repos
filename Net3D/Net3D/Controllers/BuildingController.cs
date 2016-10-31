@@ -16,7 +16,8 @@ namespace Net3D.Controllers
         public IHttpActionResult Get(string id)
         {
             List<Building> lBuildings = new List<Building>();
-            var contents = System.IO.File.ReadAllText(HttpContext.Current.Server.MapPath(@"~/App_Data/Frankfurt.oda"));
+            string path = id.Replace(";", ".");
+            var contents = System.IO.File.ReadAllText(HttpContext.Current.Server.MapPath(@"~/App_Data/" + path));
 
             var lines = contents.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
             int num = 0;

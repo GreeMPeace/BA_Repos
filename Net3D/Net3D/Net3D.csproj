@@ -161,6 +161,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AntennaController.cs" />
     <Compile Include="Controllers\BuildingController.cs" />
+    <Compile Include="Controllers\DatasetController.cs" />
     <Compile Include="Controllers\MeasurementController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -168,6 +169,7 @@
     <Compile Include="Models\Antenna.cs" />
     <Compile Include="Models\Building.cs" />
     <Compile Include="Models\Measurement.cs" />
+    <Compile Include="Models\Registration.cs" />
     <Compile Include="Models\SimulMeasurement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\fourdimlist.cs" />

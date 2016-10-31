@@ -1,8 +1,13 @@
 ﻿HUDController = function () {
     this.elements = [];
-    this.data = {};
+    this.figures = [];
+    this.data = document.createElement('div');
+    this.data.className = 'data-area';
+    this.data.style.bottom = '0px';
+    this.data.style.left = '0px';
+    container.appendChild(this.data);
     this.hudtop = document.createElement('div');
-    this.hudtop.style.position = 'absolute';
+    this.hudtop.style.position = 'fixed';
     this.hudtop.style.top = '0px';
     this.hudtop.style.left = '0px';
     container.appendChild(this.hudtop);
@@ -24,10 +29,7 @@ HUDController.prototype.addButton = function (name, text, onclick) {
     //loadButton.style.top = pos.top;
     loadButton.addEventListener("click", onclick);
     this.hudtop.appendChild(loadButton);
-    var element = {};
-    element.elem = loadButton;
-    element.name = name;
-    this.elements.push(element)
+    this.elements[name] = loadButton;
 };
 
 HUDController.prototype.addDropdown = function (name, text, onclick) {
@@ -48,12 +50,47 @@ HUDController.prototype.addDropdown = function (name, text, onclick) {
     }
     chooseArea.appendChild(ItemArea);
     this.hudtop.appendChild(chooseArea);
-    var obj = {};
-    obj.name = name;
-    obj.elem = chooseArea;
-    this.elements.push(obj);
-}
+    this.elements[name] = chooseArea;
+};
 
-HUDController.prototype.addData = function () {
+HUDController.prototype.addData = function (onclick) {
+    var xcoord = document.createElement('p');
+    xcoord.textContent = "x: ";
+    this.figures['xcoord'] = xcoord;
+    this.data.appendChild(xcoord);
+    var ycoord = document.createElement('p');
+    ycoord.textContent = "y: ";
+    this.figures['ycoord'] = ycoord
+    this.data.appendChild(ycoord);
+    var zcoord = document.createElement('p');
+    zcoord.textContent = "z: ";
+    this.figures['zcoord'] = zcoord
+    this.data.appendChild(zcoord);
+    var xtar = document.createElement('p');
+    xtar.textContent = "xtar: ";
+    this.figures['xtar'] = xtar;
+    this.data.appendChild(xtar);
+    var ytar = document.createElement('p');
+    ytar.textContent = "ytar: ";
+    this.figures['ytar'] = ytar;
+    this.data.appendChild(ytar);
+    var ztar = document.createElement('p');
+    ztar.textContent = "ztar: ";
+    this.figures['ztar'] = ztar;
+    this.data.appendChild(ztar);
+    var isolevel = document.createElement('p');
+    isolevel.textContent = "isolevel: ";
+    this.figures['isolevel'] = isolevel;
+    this.data.appendChild(isolevel);
+    this.data.addEventListener("click", onclick);
+};
 
-}
+HUDController.prototype.updateData = function (position, target) {
+    this.figures['xcoord'].textContent = "x: " + position.x;
+    this.figures['ycoord'].textContent = "y: " + position.y;
+    this.figures['zcoord'].textContent = "z: " + position.z;
+    this.figures['xtar'].textContent = "xtar: " + target.x;
+    this.figures['ytar'].textContent = "ytar: " + target.y;
+    this.figures['ztar'].textContent = "ztar: " + target.z;
+    this.figures['isolevel'].textContent = "isolevel: " + guiController.isolevel;
+};

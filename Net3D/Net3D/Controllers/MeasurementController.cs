@@ -13,9 +13,10 @@ namespace Net3D.Controllers
     public class MeasurementController : ApiController
     {
         [HttpGet]
-        public IHttpActionResult GetSimulation(string id)
+        public IHttpActionResult GetSimulation(string id , string dimensions)
         {
-            var dimstr = id.Split(new char[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
+            var dimstr = dimensions.Split(new char[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
+            string path = id.Replace(";", ".");
             if (dimstr.Length != 3)
             {
                 return Content(HttpStatusCode.BadRequest, "Error with the dimensions!");
@@ -28,7 +29,7 @@ namespace Net3D.Controllers
 
             SimulMeasurement meas = new SimulMeasurement(dims);
 
-            var contents = System.IO.File.ReadAllText(HttpContext.Current.Server.MapPath(@"~/App_Data/Power_Fra_2_BS_1.txt"));
+            var contents = System.IO.File.ReadAllText(HttpContext.Current.Server.MapPath(@"~/App_Data/" + path));
 
             var lines = contents.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
             string[] words;
@@ -58,18 +59,19 @@ namespace Net3D.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult GetReal(string id, string end = "")
+        public IHttpActionResult GetReal(string id)
         {
-            var control = id.Split(new char[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
+            string path = id.Replace(";", ".");
+            string [] parts = path.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
 
-            if (!(end == "csv"))
+            if (!(parts.Last() == "csv"))
             {
                 return Content(HttpStatusCode.BadRequest, "Wrong File! Expected .cvs");
             }
 
             Measurement meas = new Measurement();
 
-            var contents = System.IO.File.ReadAllText(HttpContext.Current.Server.MapPath(@"~/App_Data/" + id + "." + end));
+            var contents = System.IO.File.ReadAllText(HttpContext.Current.Server.MapPath(@"~/App_Data/" + path));
 
             var lines = contents.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
 

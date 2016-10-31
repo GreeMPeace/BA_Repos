@@ -58,7 +58,6 @@ function initialize() {
 
     setupGui();
 
-    controls = new THREE.OrbitControls(camera, renderer.domElement);
 
     var light = new THREE.AmbientLight(0x404040); // soft white light
     scene.add(light);
@@ -68,47 +67,11 @@ function initialize() {
     directionalLight.castShadow = true;
     scene.add(directionalLight);
 
-    updateGUI(camera.position, controls.target, false);
 
-    var hudelement = document.createElement('div');
-    var picture = document.createElement('img');
-    var left = document.createElement('div');
-    var right = document.createElement('div');
-    left.innerText = "lower";
-    left.style.position = "absolute";
-    left.style.left = "0px";
-    right.innerText = "higher";
-    right.style.position = "absolute";
-    right.style.right = "0px";
-    hudelement.appendChild(picture);
-    hudelement.appendChild(left);
-    hudelement.appendChild(right);
-    picture.setAttribute("src", "data/Colorstrip.png");
-    hudelement.style.position = "absolute";
-    hudelement.style.bottom = '20px';
-    hudelement.style.right = '5px';
-    hudelement.style.zIndex = "2";
-    hudelement.style.backgroundColor = "#FFFFFF"
-    container.appendChild(hudelement);
+    
 
-    hudcon = new HUDController();
-    hudcon.addButton("loadFrank", "Load", guiController.loadFrank);
-
-    var content = ["Mode: Single", "Single", "Maximum", "Distribution"];
-    var funcs = [null, function () {
-        guiController.mode = 'single';
-        var loader = new SimulationLoader();
-        loader.visualize();
-    }, function () {
-        guiController.mode = 'max';
-        var loader = new SimulationLoader();
-        loader.visualize();
-    }, function () {
-        guiController.mode = 'distribution';
-        var loader = new SimulationLoader();
-        loader.visualize();
-    }];
-    hudcon.addDropdown("modes", content, funcs);
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
+    hudcon.updateData(camera.position, controls.target);
     //var loadButton = document.createElement('div');
     //loadButton.className = "hudbutton";
     //loadButton.textContent = "Load Frankfurt";
