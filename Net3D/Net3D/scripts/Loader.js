@@ -6,8 +6,6 @@ GuiInterface.prototype.loadBuildings = function (path) {
         url: uri,
         type: "GET",
         datatype: "json",
-        beforeSend: function () { },
-        complete: function () { }
     })
     .done(function (data) {
         var Build = new BuildingLoader();
