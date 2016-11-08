@@ -2,6 +2,7 @@
 
 VolumeVisualizer.prototype.dot = function (values, min, max, res, step) {
     var geom = new THREE.BufferGeometry();
+    var sprite = new THREE.TextureLoader().load("data/disc.png");
     var vertices = [], colors = [];
     var num = {};
     num.x = (max.x - min.x) * res.x + 1;
@@ -31,6 +32,7 @@ VolumeVisualizer.prototype.dot = function (values, min, max, res, step) {
     return new THREE.Points(geom, new THREE.PointsMaterial({
         vertexColors: THREE.VertexColors,
         size: 2
+        //map: sprite
     }));
 }
 

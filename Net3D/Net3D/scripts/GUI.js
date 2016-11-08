@@ -114,7 +114,7 @@ function setupGui() {
         $("#ytar").val(controls.target.y);
         $("#ztar").val(controls.target.z);
         $("#isolevel").val(guiController.isolevel);
-        $("#isocolor").val(guiController.isocolor.replace("0x", "#"));
+        $("#isocolor").val(guiController.isocolor);
         Datadialog.dialog("open");
     });
     return;
@@ -257,8 +257,8 @@ function changeVals() {
         }
     }
     if (isosurf) {
-        guiController.isocolor = col[0].value.replace('#', '0x');
-        isosurf.material.color.setHex(guiController.isocolor);
+        guiController.isocolor = col[0].value;
+        isosurf.material.color.set(guiController.isocolor);
     }
 
     hudcon.updateData(camera.position, controls.target);
