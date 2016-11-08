@@ -67,8 +67,9 @@ RealData.prototype.addSpheres = function (points, rad) {
             sum = 0;
             weight = 0;
             for (var k = 0; k < points.geometry.vertices.length; k++) {
-                weight += points.geometry.colors[k].getHSL().h / (pnt.distanceTo(points.geometry.vertices[k]) * pnt.distanceTo(points.geometry.vertices[k]));
-                sum += 1 / (pnt.distanceTo(points.geometry.vertices[k]) * pnt.distanceTo(points.geometry.vertices[k]));
+                var dist = pnt.distanceTo(points.geometry.vertices[k]);
+                weight += points.geometry.colors[k].getHSL().h / ( dist * dist);
+                sum += 1 / (dist * dist);
             }
             weight = weight / sum;
             var col = new THREE.Color(0xffffff);

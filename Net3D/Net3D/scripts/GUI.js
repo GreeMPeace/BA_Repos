@@ -256,8 +256,10 @@ function changeVals() {
             changeIso();
         }
     }
-    if (isosurf)
-        isosurf.material.color.setHex(col[0].value.replace('#', '0x'));
+    if (isosurf) {
+        guiController.isocolor = col[0].value.replace('#', '0x');
+        isosurf.material.color.setHex(guiController.isocolor);
+    }
 
     hudcon.updateData(camera.position, controls.target);
     return;
