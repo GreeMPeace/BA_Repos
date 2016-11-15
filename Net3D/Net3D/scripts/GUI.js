@@ -90,18 +90,15 @@ function setupGui() {
     var modecontent = ["Mode: Single", "Single", "Maximum", "Distribution"];
     var modefuncs = [null, function () {
         guiController.mode = 'single';
-        var loader = new SimulationLoader();
-        loader.visualize();
+        simulcon.visualize();
         hudcon.elements["modes"].children[0].textContent = "Mode: Single";
     }, function () {
         guiController.mode = 'max';
-        var loader = new SimulationLoader();
-        loader.visualize();
+        simulcon.visualize();
         hudcon.elements["modes"].children[0].textContent = "Mode: Max";
     }, function () {
         guiController.mode = 'distribution';
-        var loader = new SimulationLoader();
-        loader.visualize();
+        simulcon.visualize();
         hudcon.elements["modes"].children[0].textContent = "Mode: Distr";
     }];
     hudcon.addDropdown("modes", modecontent, modefuncs);
@@ -281,8 +278,7 @@ function changeDots() {
 }
 
 function changeIso() {
-    var Simu = new SimulationLoader();
-    Simu.visualize();
+    simulcon.visualize();
     //if (meas) {
     //    if (guiController.mode == 'single') {
     //        walker = new CubeMarcher();

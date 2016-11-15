@@ -7,11 +7,19 @@ using System.Net.Http;
 using System.Web.Http;
 using Net3D.Models;
 using Net3D.Utils;
+using DotSpatial.Projections;
 
 namespace Net3D.Controllers
 {
     public class MeasurementController : ApiController
     {
+        struct Final
+        {
+            public fourdimlist<double> vals;
+            public double[] min;
+            public double[] max;
+        };
+
         [HttpGet]
         public IHttpActionResult GetSimulation(string id , string dimensions)
         {
@@ -44,10 +52,29 @@ namespace Net3D.Controllers
                 meas.x.Add(double.Parse(words[0], System.Globalization.CultureInfo.InvariantCulture));
                 meas.y.Add(double.Parse(words[1], System.Globalization.CultureInfo.InvariantCulture));
                 meas.z.Add(double.Parse(words[2], System.Globalization.CultureInfo.InvariantCulture));
+
+                if (meas.min[0] > meas.x.Last() || i == 1)
+                    meas.min[0] = meas.x.Last();
+                if (meas.max[0] < meas.x.Last() || i == 1)
+                    meas.max[0] = meas.x.Last();
+                if (meas.min[1] > meas.y.Last() || i == 1)
+                    meas.min[1] = meas.y.Last();
+                if (meas.max[1] < meas.y.Last() || i == 1)
+                    meas.max[1] = meas.y.Last();
+                if (meas.min[2] > meas.z.Last() || i == 1)
+                    meas.min[2] = meas.z.Last();
+                if (meas.max[2] < meas.z.Last() || i == 1)
+                    meas.max[2] = meas.z.Last();
+
                 meas.vals.Add(new List<double>());
                 for (int j = 3; j < words.Length; j++)
                 {
                     meas.vals[meas.vals.Count - 1].Add(double.Parse(words[j], System.Globalization.CultureInfo.InvariantCulture));
+
+                    if (meas.min[4] > meas.vals.Last().Last())
+                        meas.min[4] = meas.vals.Last().Last();
+                    else if (meas.max[4] < meas.vals.Last().Last())
+                        meas.max[4] = meas.vals.Last().Last();
                 }
             }
 
@@ -55,7 +82,13 @@ namespace Net3D.Controllers
             //meas.expand();
             fourdimlist<double> values = meas.extract();
 
-            return Ok(values);
+            
+            Final response;
+            response.vals = values;
+            response.min = meas.min;
+            response.max = meas.max;
+
+            return Ok(response);
         }
 
         [HttpGet]
@@ -113,6 +146,11 @@ namespace Net3D.Controllers
 
         private void fetchMap(double[] min, double[] max, string name)
         {
+            ProjectionInfo pStart = KnownCoordinateSystems.Geographic.World.WGS1984;
+            ProjectionInfo pEnd = KnownCoordinateSystems.Projected.UtmWgs1984.WGS1984UTMZone32N;
+
+
+
             double xMiddle = (max[0] + min[0]) / 2;
             double yMiddle = (max[1] + min[1]) / 2;
 

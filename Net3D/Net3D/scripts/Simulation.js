@@ -1,28 +1,49 @@
-﻿SimulationLoader = function () { };
+﻿SimulationLoader = function (data) {
+    this.min = data.min;
+    this.max = data.max;
+    this.values = data.vals;
 
-SimulationLoader.prototype.expand = function (values) {
-    if (values[0][0][0].length != 1)
+    this.offset = [0, 0];
+    this.expand();
+
+    if (buildingcon) {
+        this.offset[0] = this.min[0] - buildingcon.min[0];
+        this.offset[1] = this.min[1] - buildingcon.min[1];
+    }
+    min.x = this.offset[0];
+    min.y = this.offset[1];
+    min.z = this.min[2];
+    max.x = this.max[0] - this.min[0] + this.offset[0];
+    max.y = this.max[1] - this.min[1] + this.offset[1];
+    max.z = this.max[2];
+};
+
+SimulationLoader.prototype.expand = function () {
+    if (this.values[0][0][0].length != 1)
         return;
 
-    for (var n = 0; n < values.length; n++) {
-        for (var i = 0; i < values[n].length; i++) {
-            for (var j = 0; j < values[n][i].length; j++) {
-                values[n][i][j].push(values[n][i][j][0]);
-                values[n][i][j].push(values[n][i][j][0]);
-                values[n][i][j].push(values[n][i][j][0]);
-                values[n][i][j].push(values[n][i][j][0]);
+    for (var n = 0; n < this.values.length; n++) {
+        for (var i = 0; i < this.values[n].length; i++) {
+            for (var j = 0; j < this.values[n][i].length; j++) {
+                this.values[n][i][j].push(this.values[n][i][j][0]);
+                this.values[n][i][j].push(this.values[n][i][j][0]);
+                this.values[n][i][j].push(this.values[n][i][j][0]);
+                this.values[n][i][j].push(this.values[n][i][j][0]);
             }
         }
     }
+
+    this.min[2] -= 3;
+    this.max[2] += 3;
 };
 
 
 SimulationLoader.prototype.visualize = function () {
-    if (meas) {
+    if (this.values) {
         if (guiController.mode == 'single') {
             walker = new CubeMarcher();
             var index = Number(guiController.source) - 1;
-            var geosurf = new walker.march(meas[index], guiController.isolevel, min, max, res);
+            var geosurf = new walker.march(this.values[index], guiController.isolevel, min, max, res);
             var isosurf = new THREE.Mesh(geosurf, new THREE.MeshBasicMaterial({
                 color: guiController.isocolor,
                 opacity: 0.8,
@@ -43,7 +64,7 @@ SimulationLoader.prototype.visualize = function () {
                 scene.remove(olddots);
             }
             var Volumepainter = new VolumeVisualizer();
-            var volume = Volumepainter.dot(meas[Number(guiController.source) - 1], min, max, res, step);
+            var volume = Volumepainter.dot(this.values[Number(guiController.source) - 1], min, max, res, step);
             volume.name = "dots";
             if (!guiController.dots) {
                 volume.visible = false;
@@ -83,7 +104,7 @@ SimulationLoader.prototype.visualize = function () {
                 scene.remove(olddots);
             }
             var Volumepainter = new VolumeVisualizer();
-            var volume = Volumepainter.dotAntennas(meas, min, max, res, step);
+            var volume = Volumepainter.dotAntennas(this.values, min, max, res, step);
             volume.name = "dots";
 
             if (!guiController.dots) {
@@ -133,17 +154,16 @@ SimulationLoader.prototype.visualize = function () {
 SimulationLoader.prototype.addMaxPoints = function (vis) {
     var Volumepainter = new VolumeVisualizer();
     var maxes = [];
-    for (var n = 0; n < meas.length; n++) {
-        debugger;
-        for (var i = 0; i < meas[n].length; i++) {
+    for (var n = 0; n < this.values.length; n++) {
+        for (var i = 0; i < this.values[n].length; i++) {
             if (n == 0)
                 maxes[i] = [];
-            for (var j = 0; j < meas[n][i].length; j++) {
+            for (var j = 0; j < this.values[n][i].length; j++) {
                 if (n == 0)
                     maxes[i][j] = [];
-                for (var k = 0; k < meas[n][i][j].length; k++) {
-                    if (maxes[i][j][k] < meas[n][i][j][k] || n == 0)
-                        maxes[i][j][k] = meas[n][i][j][k];
+                for (var k = 0; k < this.values[n][i][j].length; k++) {
+                    if (maxes[i][j][k] < this.values[n][i][j][k] || n == 0)
+                        maxes[i][j][k] = this.values[n][i][j][k];
                 }
             }
         }

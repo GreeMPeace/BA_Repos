@@ -1,5 +1,4 @@
-﻿var scene, hudscene, width, height, camera, hudcamera, renderer, container, hudcon;
-var meas;
+﻿var scene, hudscene, width, height, camera, hudcamera, renderer, container, hudcon, realcon, simulcon, buildingcon;
 var buildings = [], antennas = [];
 
 var min = {

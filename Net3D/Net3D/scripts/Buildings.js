@@ -1,6 +1,16 @@
-﻿BuildingLoader = function () { };
+﻿BuildingLoader = function (data) {
+    this.obj = data.lBuildings;
+    this.min = data.min;
 
-BuildingLoader.prototype.createModel = function (obj) {
+    this.offset = [0, 0];
+
+    if (simulcon) {
+        this.offset[0] = this.min[0] - simulcon.min[0];
+        this.offset[1] = this.min[1] - simulcon.min[0];
+    }
+};
+
+BuildingLoader.prototype.createModel = function () {
     var city = new THREE.Object3D();
     var path = new THREE.LineCurve3(new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, 1));
     var tube = new THREE.TubeGeometry(path);
@@ -8,16 +18,16 @@ BuildingLoader.prototype.createModel = function (obj) {
     tube.normals = [new THREE.Vector3(1, 0, 0), new THREE.Vector3(1, 0, 0)];
     tube.binormals = [new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 1, 0)];
 
-    for (var i = 0; i < obj.length; i++) {
+    for (var i = 0; i < this.obj.length; i++) {
         var build = new THREE.Shape();
-        var first = new THREE.Vector2(obj[i].x[0], obj[i].y[0]);
-        var length = obj[i].x.length;
+        var first = new THREE.Vector2(this.obj[i].x[0] + this.offset[0], this.obj[i].y[0] + this.offset[1]);
+        var length = this.obj[i].x.length;
         build.moveTo(first.x, first.y);
         for (var j = 1; j < length; j++) {
-            build.lineTo(obj[i].x[j], obj[i].y[j]);
+            build.lineTo(this.obj[i].x[j] + this.offset[0], this.obj[i].y[j] + this.offset[1]);
         }
         build.lineTo(first.x, first.y);
-        path = new THREE.LineCurve3(new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, obj[i].height));
+        path = new THREE.LineCurve3(new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, this.obj[i].height));
         var geom = build.extrude({
             extrudePath: path,
             frames: tube
@@ -32,9 +42,9 @@ BuildingLoader.prototype.createModel = function (obj) {
     return city;
 };
 
-BuildingLoader.prototype.addBuild = function (building) {
+BuildingLoader.prototype.addBuild = function () {
 
-    var Obj = this.createModel(building);
+    var Obj = this.createModel(this.obj);
 
     scene.add(Obj);
 }

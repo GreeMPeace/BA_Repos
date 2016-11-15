@@ -12,10 +12,16 @@ namespace Net3D.Controllers
 {
     public class BuildingController : ApiController
     {
+        struct Final
+        {
+            public List<Building> lBuildings;
+            public double[] min;
+        };
         [HttpGet]
         public IHttpActionResult Get(string id)
         {
             List<Building> lBuildings = new List<Building>();
+            double[] min = { 0, 0 };
             string path = id.Replace(";", ".");
             var contents = System.IO.File.ReadAllText(HttpContext.Current.Server.MapPath(@"~/App_Data/" + path));
 
@@ -31,6 +37,8 @@ namespace Net3D.Controllers
                 if (words[0] == "SETTINGS")
                 {
                     num = Convert.ToInt32(words[1]);
+                    min[0] = Convert.ToDouble(words[2]);
+                    min[1] = Convert.ToDouble(words[3]);
                     continue;
                 }
                 if (words[0] == "BEGIN_BUILDINGS")
@@ -58,7 +66,11 @@ namespace Net3D.Controllers
                 else
                     continue;
             }
-            return Ok(lBuildings);
+
+            Final response;
+            response.lBuildings = lBuildings;
+            response.min = min;
+            return Ok(response);
         }
     }
 }

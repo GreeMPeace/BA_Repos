@@ -8,8 +8,8 @@ GuiInterface.prototype.loadBuildings = function (path) {
         datatype: "json",
     })
     .done(function (data) {
-        var Build = new BuildingLoader();
-        Build.addBuild(data);
+        buildingcon = new BuildingLoader(data);
+        buildingcon.addBuild();
     })
     .fail(function (a, b, c) {
         alert("Error")
@@ -26,10 +26,9 @@ GuiInterface.prototype.loadSimulation = function (path) {
         complete: function () { }
     })
     .done(function (data) {
-        var Simul = new SimulationLoader();
-        Simul.expand(data);
-        meas = data;
-        Simul.visualize();
+        debugger;
+        simulcon = new SimulationLoader(data);
+        simulcon.visualize();
     })
     .fail(function (a, b, c) {
         alert("Error")
