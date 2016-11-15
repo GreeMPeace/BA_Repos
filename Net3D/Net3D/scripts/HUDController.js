@@ -22,7 +22,7 @@ HUDController.prototype.getByName = function (name) {
 };
 
 HUDController.prototype.addButton = function (name, text, onclick) {
-    var loadButton = document.createElement('div');
+    var loadButton = document.createElement('button');
     loadButton.className = "hudbutton";
     loadButton.textContent = text;
     //loadButton.style.left = pos.left;
@@ -86,11 +86,11 @@ HUDController.prototype.addData = function (onclick) {
 };
 
 HUDController.prototype.updateData = function (position, target) {
-    this.figures['xcoord'].textContent = "x: " + position.x;
-    this.figures['ycoord'].textContent = "y: " + position.y;
-    this.figures['zcoord'].textContent = "z: " + position.z;
-    this.figures['xtar'].textContent = "xtar: " + target.x;
-    this.figures['ytar'].textContent = "ytar: " + target.y;
-    this.figures['ztar'].textContent = "ztar: " + target.z;
+    this.figures['xcoord'].textContent = "x: " + position.x.toFixed(2);
+    this.figures['ycoord'].textContent = "y: " + position.y.toFixed(2);
+    this.figures['zcoord'].textContent = "z: " + position.z.toFixed(2);
+    this.figures['xtar'].textContent = "xtar: " + target.x.toFixed(2);
+    this.figures['ytar'].textContent = "ytar: " + target.y.toFixed(2);
+    this.figures['ztar'].textContent = "ztar: " + target.z.toFixed(2);
     this.figures['isolevel'].textContent = "isolevel: " + guiController.isolevel;
 };

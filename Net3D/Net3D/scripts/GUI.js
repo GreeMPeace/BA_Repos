@@ -107,13 +107,13 @@ function setupGui() {
     hudcon.addDropdown("modes", modecontent, modefuncs);
 
     hudcon.addData(function () {
-        $("#xcoord").val(camera.position.x);
-        $("#ycoord").val(camera.position.y);
-        $("#zcoord").val(camera.position.z);
-        $("#xtar").val(controls.target.x);
-        $("#ytar").val(controls.target.y);
-        $("#ztar").val(controls.target.z);
-        $("#isolevel").val(guiController.isolevel);
+        $("#xcoord").val(camera.position.x.toFixed(2));
+        $("#ycoord").val(camera.position.y.toFixed(2));
+        $("#zcoord").val(camera.position.z.toFixed(2));
+        $("#xtar").val(controls.target.x.toFixed(2));
+        $("#ytar").val(controls.target.y.toFixed(2));
+        $("#ztar").val(controls.target.z.toFixed(2));
+        $("#isolevel").val(guiController.isolevel.toFixed(2));
         $("#isocolor").val(guiController.isocolor);
         Datadialog.dialog("open");
     });
