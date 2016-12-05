@@ -50,6 +50,13 @@ BuildingLoader.prototype.createModel = function () {
 BuildingLoader.prototype.addBuild = function () {
 
     var Obj = this.createModel(this.obj);
-
+    Obj.name = "buildings";
     scene.add(Obj);
-}
+};
+
+BuildingLoader.prototype.cleanup = function () {
+    var old = scene.getObjectByName("buildings");
+    if (old) {
+        scene.remove(old);
+    }
+};

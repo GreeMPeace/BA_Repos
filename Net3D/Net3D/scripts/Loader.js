@@ -1,4 +1,5 @@
-﻿GuiInterface = function () { };
+﻿GuiInterface = function () {
+};
 
 GuiInterface.prototype.loadBuildings = function (path) {
     var uri = 'api/Building/Get/' + path.replace(".", ";");
@@ -51,8 +52,8 @@ GuiInterface.prototype.loadRealData = function (path) {
         complete: function () { }
     })
     .done(function (data) {
-        var Real = new RealData(data);
-        Real.display();
+        realcon = new RealData(data);
+        realcon.display();
     })
     .fail(function (a, b, c) {
         alert("Error")

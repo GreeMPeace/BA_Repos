@@ -4,6 +4,7 @@
     this.x = data.x;
     this.y = data.y;
     this.vals = data.vals;
+    this.num = 0;
 }
 
 RealData.prototype.display = function () {
@@ -21,7 +22,7 @@ RealData.prototype.display = function () {
     });
     var plane = new THREE.Mesh(geometry, material);
     plane.receiveShadow = true;
-
+    plane.name = "plane";
     scene.add(plane);
 
     geometry = new THREE.Geometry();
@@ -38,7 +39,7 @@ RealData.prototype.display = function () {
         size: 0.2,
         vertexColors: THREE.VertexColors
     }));
-
+    points.name = "points";
     scene.add(points);
 
     this.addSpheres(points, 20);
@@ -53,6 +54,7 @@ RealData.prototype.display = function () {
 };
 
 RealData.prototype.addSpheres = function (points, rad) {
+    this.num++;
     var inter = [];
     var spheregeom = new THREE.SphereGeometry(rad, 20, 20);
     var faceindex = ['a', 'b', 'c'];
@@ -83,7 +85,7 @@ RealData.prototype.addSpheres = function (points, rad) {
         opacity: 0.4,
         depthWrite: false
     }));
-
+    Sphere.name = "sphere" + this.num;
     scene.add(Sphere);
 }
 
@@ -148,6 +150,27 @@ RealData.prototype.addColorstrip = function addColorstrip(texture) {
 
     //hudscene.add(sprite);
 
+};
+
+RealData.prototype.cleanup = function () {
+   
+        var old = scene.getObjectByName("points");
+        if (old) {
+            old.geometry.dispose();
+            scene.remove(old);
+        }
+        var old = scene.getObjectByName("plane");
+        if (old) {
+            old.geometry.dispose();
+            scene.remove(old);
+        }
+        for (var i = 1; i <= this.num; i++) {
+            var old = scene.getObjectByName("sphere" + i);
+            if (old) {
+                old.geometry.dispose();
+                scene.remove(old);
+            }
+        }
 };
 
 RealData.updateSprites = function () {

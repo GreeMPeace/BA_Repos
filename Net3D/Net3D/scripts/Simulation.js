@@ -156,6 +156,19 @@ SimulationLoader.prototype.visualize = function () {
     //}
 };
 
+SimulationLoader.prototype.cleanup = function () {
+    var oldsurf = scene.getObjectByName("isosurf");
+    if (oldsurf) {
+        oldsurf.geometry.dispose();
+        scene.remove(oldsurf);
+    }
+    var olddots = scene.getObjectByName("dots");
+    if (olddots) {
+        olddots.geometry.dispose();
+        scene.remove(olddots);
+    }
+};
+
 SimulationLoader.prototype.addMaxPoints = function (vis) {
     var Volumepainter = new VolumeVisualizer();
     var maxes = [];

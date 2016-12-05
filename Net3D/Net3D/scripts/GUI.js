@@ -149,6 +149,7 @@ function loadordel() {
             alert("Could not get the Data.")
         })
         .done(function (data) {
+            cleanup();
             var load = new GuiInterface();
 
             if (data.data[3] != "none")
@@ -224,6 +225,21 @@ function loadRegisteredSets() {
         }
     });
 }
+
+function cleanup() {
+    if (realcon) {
+        realcon.cleanup();
+    }
+    if (simulcon) {
+        simulcon.cleanup();
+    }
+    if (buildingcon) {
+        buildingcon.cleanup();
+    }
+    realcon = null;
+    simulcon = null;
+    buildingcon = null;
+};
 
 function changeVals() {
     var crit = false;
