@@ -32,9 +32,14 @@ BuildingLoader.prototype.createModel = function () {
             extrudePath: path,
             frames: tube
         });
+        //geom.computeFaceNormals();
+        //geom.computeVertexNormals();
         city.add(new THREE.Mesh(
             geom,
-            new THREE.MeshLambertMaterial({ color: 0x5c6f84, /*wireframe: true*/ })
+            new THREE.MeshLambertMaterial({
+                color: 0x5c6f84,
+                /*wireframe: true*/
+            })
             ));
     }
     city.castShadow = true;

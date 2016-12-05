@@ -1,4 +1,4 @@
-﻿var scene, hudscene, width, height, camera, hudcamera, renderer, container, hudcon, realcon, simulcon, buildingcon;
+﻿var scene, hudscene, width, height, camera, hudcamera, renderer, container, hudcon, realcon, simulcon, buildingcon, stats;
 var buildings = [], antennas = [];
 
 var min = {
@@ -17,8 +17,8 @@ var res = {
     z: 1 / 1.5
 };
 var step = {
-    x: 3,
-    y: 3,
+    x: 2,
+    y: 2,
     z: 2
 };
 
@@ -35,6 +35,7 @@ function initialize() {
     hudcamera = new THREE.OrthographicCamera(width / -2, width / 2, height / 2, height / -2, 1, 10);
     hudcamera.position.z = 10;
     renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.shadowMap.enabled = true;
     renderer.setSize(width, height);
     renderer.autoClear = false;
     renderer.setPixelRatio(window.devicePixelRatio);
@@ -57,15 +58,36 @@ function initialize() {
 
     setupGui();
 
+    stats = new Stats();
+    stats.dom.style.position = "fixed";
+    stats.dom.style.left = "500px";
+    container.appendChild(stats.dom)
+
 
     var light = new THREE.AmbientLight(0x404040); // soft white light
     scene.add(light);
 
+    var light2 = new THREE.PointLight(0x404040, 1); // soft white light
+    light2.position.x = -100;
+    light2.position.y = -100;
+    light2.position.z = 50;
+    light2.shadowCameraVisible = true;
+    //scene.add(light2);
+
     var directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
     directionalLight.position.set(-50, -50, 50);
     directionalLight.castShadow = true;
+    //directionalLight.shadow.camera.near = 0;
+    //directionalLight.shadow.camera.far = 500;
+
+    //directionalLight.shadow.camera.left = -5;
+    //directionalLight.shadow.camera.right = 5;
+    //directionalLight.shadow.camera.top = 5;
+    //directionalLight.shadow.camera.bottom = -5;
     scene.add(directionalLight);
 
+    //var loader = new GuiInterface();
+    //loader.loadAntenna("test");
 
     
 
@@ -123,8 +145,7 @@ function render() {
     controls.update();
     requestAnimationFrame(render);
 
+    stats.update();
     renderer.clear();
     renderer.render(scene, camera);
-    renderer.clearDepth();
-    renderer.render(hudscene, hudcamera);
 }

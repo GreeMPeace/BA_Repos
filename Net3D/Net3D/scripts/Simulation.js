@@ -1,6 +1,7 @@
 ﻿SimulationLoader = function (data) {
     this.min = data.min;
     this.max = data.max;
+    this.dim = data.dims;
     this.values = data.vals;
 
     this.offset = [0, 0];
@@ -16,6 +17,9 @@
     max.x = this.max[0] - this.min[0] + this.offset[0];
     max.y = this.max[1] - this.min[1] + this.offset[1];
     max.z = this.max[2];
+    res.x = (this.dim[0]-1) / (this.max[0] - this.min[0]);
+    res.y = (this.dim[1]-1) / (this.max[1] - this.min[1]);
+    res.z = (this.dim[2]-1) / (this.max[2] - this.min[2]);
 };
 
 SimulationLoader.prototype.expand = function () {
@@ -35,6 +39,7 @@ SimulationLoader.prototype.expand = function () {
 
     this.min[2] -= 3;
     this.max[2] += 3;
+    this.dim[2] += 4;
 };
 
 
@@ -46,7 +51,7 @@ SimulationLoader.prototype.visualize = function () {
             var geosurf = new walker.march(this.values[index], guiController.isolevel, min, max, res);
             var isosurf = new THREE.Mesh(geosurf, new THREE.MeshBasicMaterial({
                 color: guiController.isocolor,
-                opacity: 0.8,
+                opacity: 0.5,
                 transparent: true,
                 side: THREE.DoubleSide
             }));

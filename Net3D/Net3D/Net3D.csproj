@@ -156,10 +156,13 @@
     <Content Include="scripts\RealData.js" />
     <Content Include="scripts\shp.js" />
     <Content Include="scripts\shp_three.js" />
+    <Content Include="scripts\stats.min.js" />
     <Content Include="scripts\three.js" />
     <Content Include="scripts\TrackballControls.js" />
     <Content Include="scripts\volume.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />

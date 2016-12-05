@@ -12,7 +12,7 @@ namespace Net3D.Models
     [Serializable]
     public class SimulMeasurement : Measurement
     {
-        public int[] dim { get; set; }
+        public double[] dim { get; set; }
         private double[,] xlookup { get; set; }
         private double[,] ylookup { get; set; }
         private double[,] zlookup { get; set; }
@@ -20,7 +20,7 @@ namespace Net3D.Models
         private int yrang { get; set; }
         private int zrang { get; set; }
 
-        public SimulMeasurement(int[] dims)
+        public SimulMeasurement()
         {
             x = new List<double>();
             y = new List<double>();
@@ -29,15 +29,18 @@ namespace Net3D.Models
             xrang = 0;
             yrang = 0;
             zrang = 0;
-            dim = dims;
-            xlookup = new double[,] { { 0, 1, 1 }, { dims[1], 0, dims[2] }, { dims[1] * dims[2], dims[1] * dims[2], 0 } };
-            ylookup = new double[,] { { 0, 1, 1 }, { dims[2], 0, dims[0] }, { dims[0] * dims[2], dims[0] * dims[2], 0 } };
-            zlookup = new double[,] { { 0, 1, 1 }, { dims[0], 0, dims[1] }, { dims[1] * dims[0], dims[1] * dims[0], 0 } };
         }
 
-        public void fill()
+        private void generateLookup()
         {
+            xlookup = new double[,] { { 0, 1, 1 }, { dim[1], 0, dim[2] }, { dim[1] * dim[2], dim[1] * dim[2], 0 } };
+            ylookup = new double[,] { { 0, 1, 1 }, { dim[2], 0, dim[0] }, { dim[0] * dim[2], dim[0] * dim[2], 0 } };
+            zlookup = new double[,] { { 0, 1, 1 }, { dim[0], 0, dim[1] }, { dim[1] * dim[0], dim[1] * dim[0], 0 } };
+        }
 
+        public void fill(double[] dims)
+        {
+            dim = dims;
             double xdiff = 0, ydiff = 0, zdiff = 0;
             double lastx = x[0];
             double lasty = y[0];
@@ -71,13 +74,31 @@ namespace Net3D.Models
                     if (m < 2)
                         throw new System.Exception("no valid values");
                     if (boolx)
+                    {
+                        xdiff = 1;
                         xrang = 2;
+                    }
                     if (booly)
+                    {
+                        ydiff = 1;
                         yrang = 2;
+                    }
                     if (boolz)
+                    {
+                        zdiff = 1;
                         zrang = 2;
+                    }
                 }
             }
+
+            dim[0] = Math.Round(dim[0] / xdiff + 1, 0, MidpointRounding.AwayFromZero);
+            dim[1] = Math.Round(dim[1] / ydiff + 1, 0, MidpointRounding.AwayFromZero);
+            dim[2] = Math.Round(dim[2] / zdiff + 1, 0, MidpointRounding.AwayFromZero);
+
+            this.generateLookup();
+
+            if (dim[0] * dim[1] * dim[2] == x.Count)
+                return;
 
             for (int l = 0; l < x.Count; l++)
             {

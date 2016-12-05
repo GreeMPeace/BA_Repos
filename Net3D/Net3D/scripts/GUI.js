@@ -1,10 +1,11 @@
 ﻿guiController = {
     isocolor: "#00f0ff",
-    source: '1',
+    source: 1,
     dots: true,
     isolevel: -79.0,
     mode: 'single',
-    registered: []
+    registered: [],
+    dens: "medium"
 };
 
 var Regdialog;
@@ -153,8 +154,9 @@ function loadordel() {
             if (data.data[3] != "none")
                 load.loadBuildings(data.data[3]);
 
-            if (data.data[2] == "simulation")
+            if (data.data[2] == "simulation") {
                 load.loadSimulation(data.data[1]);
+            }
             else
                 load.loadRealData(data.data[1]);
         });
@@ -224,6 +226,7 @@ function loadRegisteredSets() {
 }
 
 function changeVals() {
+    var crit = false;
     var x = $("#xcoord");
     var y = $("#ycoord");
     var z = $("#zcoord");
@@ -232,6 +235,9 @@ function changeVals() {
     var ztar = $("#ztar");
     var iso = $("#isolevel");
     var col = $("#isocolor");
+    var d1 = $("#dens1");
+    var d2 = $("#dens2");
+    var d3 = $("#dens3");
     var isosurf = scene.getObjectByName("isosurf");
     if (x[0].value != "")
         camera.position.x = Number(x[0].value);
@@ -245,19 +251,41 @@ function changeVals() {
         controls.target.y = Number(ytar[0].value);
     if (ztar[0].value != "")
         controls.target.z = Number(ztar[0].value);
+    if (isosurf) {
+        guiController.isocolor = col[0].value;
+        isosurf.material.color.set(guiController.isocolor);
+        crit = true;
+    }
+    if (d1[0].checked) {
+        step.x = 3;
+        step.y = 3;
+        step.z = 2;
+        crit = true;
+    }
+    else if (d2[0].checked) {
+        step.x = 2;
+        step.y = 2;
+        step.z = 2;
+        crit = true;
+    }
+    else if (d3[0].checked) {
+        step.x = 1;
+        step.y = 1;
+        step.z = 1;
+        crit = true;
+    }
     if (iso[0].value != "") {
         var temp = guiController.isolevel;
         guiController.isolevel = Number(iso[0].value);
         if (isosurf)
         {
-            changeIso();
+            crit = true;
         }
     }
-    if (isosurf) {
-        guiController.isocolor = col[0].value;
-        isosurf.material.color.set(guiController.isocolor);
-    }
 
+    if (crit) {
+        changeIso();
+    }
     hudcon.updateData(camera.position, controls.target);
     return;
 }

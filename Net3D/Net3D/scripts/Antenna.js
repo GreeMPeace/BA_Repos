@@ -5,6 +5,8 @@ AntennaLoader.prototype.addAntenna = function (apa) {
     var AntGeom;
 
     AntGeom = this.createAntenna(apa);
+    AntGeom.computeFaceNormals();
+    AntGeom.computeVertexNormals();
 
     var antennaPat = new THREE.Mesh(AntGeom, new THREE.MeshLambertMaterial({
         color: 0xef1366,

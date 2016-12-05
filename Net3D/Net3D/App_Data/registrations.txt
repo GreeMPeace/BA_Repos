@@ -1,2 +1,3 @@
-Aachen	2600_urban_Prx_Aachen.csv	real	none	
+Aachen	2600_urban_Prx_Aachen.csv	real	none	
 Frankfurt	Power_Fra_2_BS_1.txt	simulation	Frankfurt.oda	
+Frankfurt2	Frankfurt_4tx_combined.txt	simulation	Frankfurt.oda	

@@ -26,9 +26,15 @@ GuiInterface.prototype.loadSimulation = function (path) {
         complete: function () { }
     })
     .done(function (data) {
-        debugger;
         simulcon = new SimulationLoader(data);
         simulcon.visualize();
+
+        var num = ["Source: 1"], func = [null];
+        for (var i = 0; i < data.vals.length; i++) {
+            num.push("" + (i + 1));
+            func.push(new Function("if(guiController.source == " + (i+1) + ") {return;} guiController.source = " + (i+1) + "; if(guiController.mode == 'single'){simulcon.visualize();} hudcon.elements['Source'].children[0].textContent = 'Source: " + (i+1) + "';"));
+        }
+        hudcon.addDropdown("Source", num, func);
     })
     .fail(function (a, b, c) {
         alert("Error")

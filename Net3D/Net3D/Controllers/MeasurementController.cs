@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -9,6 +10,7 @@ using Net3D.Models;
 using Net3D.Utils;
 using DotSpatial.Projections;
 
+
 namespace Net3D.Controllers
 {
     public class MeasurementController : ApiController
@@ -18,35 +20,31 @@ namespace Net3D.Controllers
             public fourdimlist<double> vals;
             public double[] min;
             public double[] max;
+            public double[] dims;
         };
 
         [HttpGet]
-        public IHttpActionResult GetSimulation(string id , string dimensions)
+        public IHttpActionResult GetSimulation(string id )
         {
-            var dimstr = dimensions.Split(new char[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
             string path = id.Replace(";", ".");
-            if (dimstr.Length != 3)
-            {
-                return Content(HttpStatusCode.BadRequest, "Error with the dimensions!");
-            }
+            path = HttpContext.Current.Server.MapPath(@"~/App_Data/" + path);
+            double[] dims = new double[3];
+            
 
-            int[] dims = new int[3];
-            dims[0] = int.Parse(dimstr[0], System.Globalization.CultureInfo.InvariantCulture);
-            dims[1] = int.Parse(dimstr[1], System.Globalization.CultureInfo.InvariantCulture);
-            dims[2] = int.Parse(dimstr[2], System.Globalization.CultureInfo.InvariantCulture);
+            SimulMeasurement meas = new SimulMeasurement();
+            
+            FileStream fs = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            BufferedStream bs = new BufferedStream(fs);
+            StreamReader sr = new StreamReader(bs);
 
-            SimulMeasurement meas = new SimulMeasurement(dims);
-
-            var contents = System.IO.File.ReadAllText(HttpContext.Current.Server.MapPath(@"~/App_Data/" + path));
-
-            var lines = contents.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            string line;
             string[] words;
 
-            for (int i = 1; i < lines.Length; i++)
+            for (int i = 0; (line = sr.ReadLine()) != null; i++ )
             {
-                words = lines[i].Split(new char[] { ' ', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                words = line.Split(new char[] { ' ', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries);
 
-                if (words.Length == 0)
+                if (words.Length == 0 || i == 0)
                     continue;
 
                 meas.x.Add(double.Parse(words[0], System.Globalization.CultureInfo.InvariantCulture));
@@ -69,6 +67,11 @@ namespace Net3D.Controllers
                 meas.vals.Add(new List<double>());
                 for (int j = 3; j < words.Length; j++)
                 {
+                    if (words[j] == "N.C.")
+                    {
+                        meas.vals[meas.vals.Count - 1].Add(-1000);
+                        continue;
+                    }
                     meas.vals[meas.vals.Count - 1].Add(double.Parse(words[j], System.Globalization.CultureInfo.InvariantCulture));
 
                     if (meas.min[4] > meas.vals.Last().Last())
@@ -78,7 +81,11 @@ namespace Net3D.Controllers
                 }
             }
 
-            meas.fill();
+            dims[0] = meas.max[0] - meas.min[0];
+            dims[1] = meas.max[1] - meas.min[1];
+            dims[2] = meas.max[2] - meas.min[2];
+
+            meas.fill(dims);
             //meas.expand();
             fourdimlist<double> values = meas.extract();
 
@@ -87,6 +94,7 @@ namespace Net3D.Controllers
             response.vals = values;
             response.min = meas.min;
             response.max = meas.max;
+            response.dims = meas.dim;
 
             return Ok(response);
         }
